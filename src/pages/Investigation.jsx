@@ -57,11 +57,11 @@ export default function Investigation() {
             <ChevronLeft className="h-4 w-4" /> Back to Reports
           </Link>
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="font-display text-2xl font-extrabold text-police-900">GPS-2026-489201</h1>
+            <h1 className="font-display text-2xl font-extrabold text-police-900">KFD-2026-489201</h1>
             <span className={`badge ${statusStyles["Under Investigation"]}`}>Under Investigation</span>
             <span className="badge bg-red-100 text-red-700"><ShieldAlert className="h-3 w-3" /> Critical</span>
           </div>
-          <p className="mt-1 text-sm text-slate-500">Armed Robbery · Osu, Accra · Reported 02 Jun 2026</p>
+          <p className="mt-1 text-sm text-slate-500">Armed Robbery · Jackson's Park, Koforidua · Reported 02 Jun 2026</p>
         </div>
         <div className="flex gap-2">
           <button className="btn-outline"><Download className="h-4 w-4" /> Export Case File</button>
@@ -94,8 +94,8 @@ export default function Investigation() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Detail icon={FileText} label="Crime Type" value="Armed Robbery" />
                   <Detail icon={Calendar} label="Incident Date" value="01 Jun 2026, 22:40" />
-                  <Detail icon={MapPin} label="Location" value="Oxford Street, Osu, Accra" />
-                  <Detail icon={MapPin} label="GPS" value="5.5560° N, 0.1969° W" />
+                  <Detail icon={MapPin} label="Location" value="Jackson's Park, Koforidua" />
+                  <Detail icon={MapPin} label="GPS" value="6.0940° N, 0.2571° W" />
                 </div>
                 <div className="mt-5 rounded-xl bg-slate-50 p-4">
                   <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Description</p>
@@ -185,7 +185,7 @@ export default function Investigation() {
                 <div className="grid h-12 w-12 place-items-center rounded-full bg-police-700 text-sm font-bold text-white">KM</div>
                 <div className="flex-1">
                   <p className="text-sm font-semibold text-slate-800">{assigned}</p>
-                  <p className="text-xs text-slate-500">Lead Investigator · Accra Central</p>
+                  <p className="text-xs text-slate-500">Lead Investigator · Koforidua Central</p>
                 </div>
                 <span className="badge bg-emerald-100 text-emerald-700">Active</span>
               </div>
@@ -242,7 +242,7 @@ export default function Investigation() {
               <Row label="Priority" value={<span className="badge bg-red-100 text-red-700">Critical</span>} />
               <Row label="Status" value={<span className={`badge ${statusStyles["Under Investigation"]}`}>Under Investigation</span>} />
               <Row label="Officer" value={assigned} />
-              <Row label="Region" value="Greater Accra" />
+              <Row label="Zone" value="Central Koforidua" />
               <Row label="Days Open" value="8 days" />
               <Row label="Evidence" value="4 files" />
             </dl>

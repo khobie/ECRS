@@ -20,7 +20,7 @@ import {
   Copy,
   Printer,
 } from "lucide-react";
-import { crimeCategories, regions } from "../data/mock";
+import { crimeCategories, zones, municipality } from "../data/mock";
 import { generateCaseId } from "../lib/utils";
 
 const steps = [
@@ -88,7 +88,7 @@ export default function ReportCrime() {
     date: "",
     time: "",
     location: "",
-    region: "",
+    zone: "",
     gps: "",
     description: "",
     suspect: "",
@@ -113,7 +113,7 @@ export default function ReportCrime() {
   const removeFile = (key, idx) =>
     setFiles((prev) => ({ ...prev, [key]: prev[key].filter((_, i) => i !== idx) }));
 
-  const detectGps = () => update("gps", "5.5560° N, 0.1969° W");
+  const detectGps = () => update("gps", "6.0940° N, 0.2571° W");
 
   const copyId = () => {
     navigator.clipboard?.writeText(caseId);
@@ -217,17 +217,17 @@ export default function ReportCrime() {
                   <input type="time" className="input" value={form.time} onChange={(e) => update("time", e.target.value)} />
                 </div>
                 <div>
-                  <label className="label">Region</label>
-                  <select className="input" value={form.region} onChange={(e) => update("region", e.target.value)}>
-                    <option value="">Select a region</option>
-                    {regions.map((r) => <option key={r} value={r}>{r}</option>)}
+                  <label className="label">Zone / Area in Koforidua</label>
+                  <select className="input" value={form.zone} onChange={(e) => update("zone", e.target.value)}>
+                    <option value="">Select a zone</option>
+                    {zones.map((z) => <option key={z} value={z}>{z}</option>)}
                   </select>
                 </div>
                 <div>
                   <label className="label">Location / Address</label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                    <input className="input pl-9" placeholder="e.g. Oxford Street, Osu" value={form.location} onChange={(e) => update("location", e.target.value)} />
+                    <input className="input pl-9" placeholder={`e.g. Jackson's Park, ${municipality.name}`} value={form.location} onChange={(e) => update("location", e.target.value)} />
                   </div>
                 </div>
                 <div className="sm:col-span-2">
@@ -353,7 +353,8 @@ export default function ReportCrime() {
                   ["Category", selectedCategory?.label],
                   ["Type", form.type],
                   ["Date & Time", [form.date, form.time].filter(Boolean).join(" ")],
-                  ["Region", form.region],
+                  ["Zone", form.zone],
+                  ["Municipality", municipality.name],
                   ["Location", form.location],
                   ["GPS", form.gps],
                 ]} />

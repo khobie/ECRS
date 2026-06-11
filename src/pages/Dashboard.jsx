@@ -106,7 +106,7 @@ export default function Dashboard() {
 
       {/* Charts row 2 */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <ChartCard title="Reports by Region" subtitle="Top regions this year">
+        <ChartCard title="Reports by Zone" subtitle="Top zones in Koforidua this year">
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={reportsByRegion} margin={{ left: -20, right: 10 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#eef2f7" vertical={false} />

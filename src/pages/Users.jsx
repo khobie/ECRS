@@ -172,7 +172,7 @@ export default function Users() {
                 </div>
                 <div>
                   <label className="label">Station</label>
-                  <input className="input" placeholder="e.g. Accra Central" />
+                  <input className="input" placeholder="e.g. Koforidua Central" />
                 </div>
               </div>
               <label className="flex items-center gap-2 rounded-lg bg-gold-50 p-3 text-sm text-slate-600">

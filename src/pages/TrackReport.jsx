@@ -19,7 +19,7 @@ export default function TrackReport() {
     setResult({
       id: caseId.toUpperCase(),
       type: "Armed Robbery",
-      location: "Osu, Accra",
+      location: "Jackson's Park, Koforidua",
       officer: "Insp. Kwame Mensah",
       filed: "2026-06-02T09:14:00",
       current: "Under Investigation",
@@ -47,7 +47,7 @@ export default function TrackReport() {
             <FileText className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
             <input
               className="input pl-9 uppercase"
-              placeholder="e.g. GPS-2026-489201"
+              placeholder="e.g. KFD-2026-489201"
               value={caseId}
               onChange={(e) => setCaseId(e.target.value)}
             />
@@ -57,7 +57,7 @@ export default function TrackReport() {
           </button>
         </div>
         {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
-        <p className="mt-2 text-xs text-slate-400">Tip: try GPS-2026-489201 to see a sample case.</p>
+        <p className="mt-2 text-xs text-slate-400">Tip: try KFD-2026-489201 to see a sample case.</p>
       </form>
 
       {result && (

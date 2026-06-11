@@ -33,15 +33,15 @@ export default function Landing() {
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 lg:grid-cols-2 lg:py-28">
           <div>
             <span className="badge bg-white/10 text-gold-300 ring-1 ring-white/20">
-              <ShieldCheck className="h-3.5 w-3.5" /> ECRS · Official Crime Reporting Platform
+              <ShieldCheck className="h-3.5 w-3.5" /> ECRS · Koforidua Crime Reporting Platform
             </span>
             <h1 className="mt-5 font-display text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">
               Report Crime <span className="text-gold-400">Safely</span> and{" "}
               <span className="text-gold-400">Securely</span>
             </h1>
             <p className="mt-5 max-w-xl text-lg text-slate-300">
-              Helping communities fight crime through timely reporting. File a report in minutes,
-              track its progress, and reach emergency services — anytime, anywhere.
+            Helping Koforidua communities fight crime through timely reporting. File a report in minutes,
+            track its progress, and reach emergency services across the municipality.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -74,8 +74,8 @@ export default function Landing() {
                     <ShieldCheck className="h-5 w-5 text-gold-400" />
                   </div>
                   <div>
-                    <p className="font-display text-sm font-bold text-police-900">Case GPS-2026-489201</p>
-                    <p className="text-xs text-slate-400">Filed 2 days ago · Osu, Accra</p>
+                    <p className="font-display text-sm font-bold text-police-900">Case KFD-2026-489201</p>
+                    <p className="text-xs text-slate-400">Filed 2 days ago · Jackson's Park, Koforidua</p>
                   </div>
                 </div>
                 <span className="badge bg-amber-100 text-amber-700">Investigating</span>

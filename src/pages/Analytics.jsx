@@ -34,7 +34,7 @@ const tooltipStyle = {
 };
 
 const radialData = resolutionRates.map((r, i) => ({
-  name: r.region,
+  name: r.zone,
   rate: r.rate,
   fill: ["#003366", "#1f5d99", "#F4B400", "#4a7cb0", "#d99e00", "#7099c2"][i],
 }));
@@ -47,7 +47,7 @@ export default function Analytics() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="font-display text-xl font-bold text-slate-900">Crime Analytics</h2>
-          <p className="text-sm text-slate-500">Data-driven insights across all regions and categories.</p>
+          <p className="text-sm text-slate-500">Data-driven insights across Koforidua zones and categories.</p>
         </div>
         <div className="flex items-center gap-2">
           <button className="btn-outline text-sm"><Calendar className="h-4 w-4" /> Last 12 months</button>
@@ -56,8 +56,8 @@ export default function Analytics() {
 
       {/* Interactive Map */}
       <ChartCard
-        title="Crime Hotspot Map"
-        subtitle="Live incident density · Google Maps integration"
+        title="Koforidua Crime Hotspot Map"
+        subtitle="Live incident density across Koforidua zones"
         action={
           <div className="flex items-center gap-3 text-xs">
             {Object.entries(levelColor).map(([k, c]) => (
@@ -126,7 +126,7 @@ export default function Analytics() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Crime by Region" subtitle="Total reports per region">
+        <ChartCard title="Crime by Zone" subtitle="Total reports per Koforidua zone">
           <ResponsiveContainer width="100%" height={280}>
             <BarChart layout="vertical" data={reportsByRegion} margin={{ left: 10, right: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#eef2f7" horizontal={false} />
@@ -161,7 +161,7 @@ export default function Analytics() {
           </div>
         </ChartCard>
 
-        <ChartCard title="Resolution Rates" subtitle="Case resolution by region (%)">
+        <ChartCard title="Resolution Rates" subtitle="Case resolution by zone (%)">
           <ResponsiveContainer width="100%" height={280}>
             <RadialBarChart innerRadius="20%" outerRadius="100%" data={radialData} startAngle={90} endAngle={-270}>
               <RadialBar background dataKey="rate" cornerRadius={8} />

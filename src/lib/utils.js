@@ -27,7 +27,7 @@ export function formatDateTime(value) {
 export function generateCaseId() {
   const year = new Date().getFullYear();
   const rand = Math.floor(100000 + Math.random() * 900000);
-  return `GPS-${year}-${rand}`;
+  return `KFD-${year}-${rand}`;
 }
 
 export const statusStyles = {
