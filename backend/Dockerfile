@@ -15,12 +15,9 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 COPY . .
 
 RUN composer dump-autoload --optimize \
+    && chmod +x docker-entrypoint.sh \
     && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8000
 
-CMD touch database/database.sqlite \
-    && php artisan migrate --seed --force \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+ENTRYPOINT ["./docker-entrypoint.sh"]

@@ -7,7 +7,7 @@ services:
     runtime: docker
     rootDir: backend
     plan: free
-    healthCheckPath: /api/health
+    healthCheckPath: /up
     envVars:
       - key: APP_ENV
         value: production
@@ -15,8 +15,6 @@ services:
         value: "false"
       - key: APP_KEY
         generateValue: true
-      - key: APP_URL
-        sync: false
       - key: LOG_CHANNEL
         value: stderr
       - key: DB_CONNECTION
@@ -27,3 +25,5 @@ services:
         value: cookie
       - key: CACHE_STORE
         value: file
+      - key: QUEUE_CONNECTION
+        value: sync

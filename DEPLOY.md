@@ -51,6 +51,7 @@
 - Render **free tier sleeps** after ~15 min idle; first load may take 30–60 seconds.
 - SQLite is used on Render for simplicity. For production, switch to PostgreSQL/MySQL.
 - Keep local XAMPP setup as backup for viva presentations.
+- If Render deploy fails, check **Logs** in the dashboard. Common fix: redeploy after pulling the latest `docker-entrypoint.sh` fix (removes broken `route:cache` on startup).
 
 ## CLI deploy (optional)
 
