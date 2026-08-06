@@ -7,6 +7,7 @@ use App\Models\CrimeCategory;
 use App\Models\PoliceStation;
 use App\Models\Report;
 use App\Models\Zone;
+use App\Support\CrimeTrend;
 use Illuminate\Http\JsonResponse;
 
 class DashboardController extends Controller
@@ -29,7 +30,7 @@ class DashboardController extends Controller
                 ['label' => 'Resolved Cases', 'value' => (string) $resolved, 'icon' => 'CheckCircle2', 'trend' => '', 'tone' => 'emerald'],
                 ['label' => 'High Priority', 'value' => (string) $highPriority, 'icon' => 'AlertTriangle', 'trend' => '', 'tone' => 'red'],
             ],
-            'crime_trend' => $this->crimeTrend(),
+            'crime_trend' => CrimeTrend::monthlyForYear(),
             'reports_by_zone' => $this->reportsByZone(),
             'category_distribution' => $this->categoryDistribution(),
             'recent_reports' => $this->recentReports(),
@@ -51,29 +52,6 @@ class DashboardController extends Controller
                 ['label' => 'Police Stations in Koforidua', 'value' => (string) $stations, 'icon' => 'Building2', 'trend' => ''],
             ],
         ]);
-    }
-
-    private function crimeTrend(): array
-    {
-        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        $year = now()->year;
-
-        $reports = Report::selectRaw('MONTH(submitted_at) as m, COUNT(*) as c')
-            ->whereYear('submitted_at', $year)
-            ->groupBy('m')
-            ->pluck('c', 'm');
-
-        $resolved = Report::selectRaw('MONTH(resolved_at) as m, COUNT(*) as c')
-            ->whereYear('resolved_at', $year)
-            ->whereNotNull('resolved_at')
-            ->groupBy('m')
-            ->pluck('c', 'm');
-
-        return collect(range(1, 12))->map(fn ($m) => [
-            'month' => $months[$m - 1],
-            'reports' => (int) ($reports[$m] ?? 0),
-            'resolved' => (int) ($resolved[$m] ?? 0),
-        ])->all();
     }
 
     private function reportsByZone(): array
