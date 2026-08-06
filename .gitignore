@@ -11,3 +11,9 @@ dist-ssr
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Project report / thesis files (local only — not for GitHub)
+docs/
+CHAPTER_4_AND_5.md
+chapters_1_2_3_extracted.txt
+scripts/__pycache__/
