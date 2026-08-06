@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   FileStack,
@@ -15,27 +15,57 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import Logo from "./Logo";
+import { api, isLoggedIn } from "../lib/api";
 
 const nav = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { to: "/dashboard/reports", label: "Crime Reports", icon: FileStack },
-  { to: "/dashboard/investigation", label: "Investigation", icon: Search },
-  { to: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
-  { to: "/dashboard/users", label: "User Management", icon: Users },
+  { to: "/officer", label: "Dashboard", icon: LayoutDashboard, end: true },
+  { to: "/officer/reports", label: "Crime Reports", icon: FileStack },
+  { to: "/officer/investigation", label: "Investigation", icon: Search },
+  { to: "/officer/analytics", label: "Analytics", icon: BarChart3 },
+  { to: "/officer/users", label: "User Management", icon: Users },
 ];
 
 const pageTitles = {
-  "/dashboard": "Dashboard Overview",
-  "/dashboard/reports": "Crime Reports",
-  "/dashboard/investigation": "Case Investigation",
-  "/dashboard/analytics": "Crime Analytics",
-  "/dashboard/users": "User Management",
+  "/officer": "Dashboard Overview",
+  "/officer/reports": "Crime Reports",
+  "/officer/investigation": "Case Investigation",
+  "/officer/analytics": "Crime Analytics",
+  "/officer/users": "User Management",
 };
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
   const title = pageTitles[location.pathname] || "Police Portal";
+
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      navigate("/officer/login", { replace: true });
+      return;
+    }
+    api.getMe()
+      .then((res) => setUser(res.data))
+      .catch(() => navigate("/officer/login", { replace: true }));
+  }, [navigate]);
+
+  const handleLogout = async () => {
+    await api.logout();
+    navigate("/officer/login");
+  };
+
+  const initials = user?.name
+    ? user.name.split(" ").map((w) => w[0]).slice(0, 2).join("")
+    : "—";
+
+  if (!user) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-slate-100 text-sm text-slate-400">
+        Loading portal…
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -86,9 +116,13 @@ export default function DashboardLayout() {
             </div>
             <p className="mt-1 text-[11px] text-slate-400">2FA enabled · JWT active</p>
           </div>
-          <Link to="/" className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 hover:bg-white/10 hover:text-white">
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 hover:bg-white/10 hover:text-white"
+          >
             <LogOut className="h-4 w-4" /> Sign out
-          </Link>
+          </button>
         </div>
       </aside>
 
@@ -121,11 +155,11 @@ export default function DashboardLayout() {
             </button>
             <div className="flex items-center gap-2.5 rounded-lg border border-slate-200 px-2 py-1.5">
               <div className="grid h-8 w-8 place-items-center rounded-full bg-police-700 text-xs font-bold text-white">
-                KM
+                {initials}
               </div>
               <div className="hidden text-left sm:block">
-                <p className="text-sm font-semibold text-slate-800">Insp. K. Mensah</p>
-                <p className="text-[11px] text-slate-400">Investigator</p>
+                <p className="text-sm font-semibold text-slate-800">{user.name}</p>
+                <p className="text-[11px] text-slate-400 capitalize">{user.role?.replace("_", " ")}</p>
               </div>
               <ChevronDown className="hidden h-4 w-4 text-slate-400 sm:block" />
             </div>

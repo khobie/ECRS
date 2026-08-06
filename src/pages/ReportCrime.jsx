@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FileText,
@@ -20,8 +20,9 @@ import {
   Copy,
   Printer,
 } from "lucide-react";
-import { crimeCategories, zones, municipality } from "../data/mock";
-import { generateCaseId } from "../lib/utils";
+import { municipality } from "../data/constants";
+import { api } from "../lib/api";
+import { formatStatus, parseGps } from "../lib/utils";
 
 const steps = [
   { id: 1, label: "Incident", icon: FileText },
@@ -80,8 +81,14 @@ function Stepper({ current }) {
 export default function ReportCrime() {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
-  const [caseId] = useState(generateCaseId());
+  const [caseId, setCaseId] = useState("");
+  const [submitStatus, setSubmitStatus] = useState("submitted");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [copied, setCopied] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [zones, setZones] = useState([]);
+  const [lookupError, setLookupError] = useState("");
   const [form, setForm] = useState({
     category: "",
     type: "",
@@ -100,8 +107,17 @@ export default function ReportCrime() {
   });
   const [files, setFiles] = useState({ photos: [], videos: [], audio: [], documents: [] });
 
+  useEffect(() => {
+    Promise.all([api.getCategories(), api.getZones()])
+      .then(([catRes, zoneRes]) => {
+        setCategories(catRes.data || []);
+        setZones(zoneRes.data || []);
+      })
+      .catch((err) => setLookupError(err.message || "Could not load form data."));
+  }, []);
+
   const update = (k, v) => setForm((f) => ({ ...f, [k]: v }));
-  const selectedCategory = crimeCategories.find((c) => c.id === form.category);
+  const selectedCategory = categories.find((c) => String(c.id) === String(form.category));
 
   const next = () => setStep((s) => Math.min(5, s + 1));
   const back = () => setStep((s) => Math.max(1, s - 1));
@@ -113,7 +129,48 @@ export default function ReportCrime() {
   const removeFile = (key, idx) =>
     setFiles((prev) => ({ ...prev, [key]: prev[key].filter((_, i) => i !== idx) }));
 
-  const detectGps = () => update("gps", "6.0940° N, 0.2571° W");
+  const detectGps = () => {
+    if (!navigator.geolocation) {
+      update("gps", "6.0940, 0.2571");
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => update("gps", `${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`),
+      () => update("gps", "6.0940, 0.2571")
+    );
+  };
+
+  const submitReport = async () => {
+    setSubmitting(true);
+    setSubmitError("");
+    const { latitude, longitude } = parseGps(form.gps);
+    try {
+      const res = await api.submitReport({
+        category_id: Number(form.category),
+        crime_type_id: Number(form.type),
+        incident_date: form.date,
+        incident_time: form.time || null,
+        location: form.location,
+        zone_id: Number(form.zone),
+        latitude,
+        longitude,
+        description: form.description,
+        suspect_info: form.suspect || null,
+        witness_info: form.witness || null,
+        is_anonymous: form.anonymous,
+        reporter_name: form.anonymous ? null : form.name || null,
+        reporter_phone: form.anonymous ? null : form.phone || null,
+        reporter_email: form.anonymous ? null : form.email || null,
+      });
+      setCaseId(res.case_id);
+      setSubmitStatus(res.status || "submitted");
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitError(err.message || "Failed to submit report.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const copyId = () => {
     navigator.clipboard?.writeText(caseId);
@@ -147,7 +204,9 @@ export default function ReportCrime() {
             <div className="mt-6 rounded-xl bg-slate-50 p-4 text-left text-sm">
               <div className="flex justify-between border-b border-slate-100 py-2">
                 <span className="text-slate-500">Crime Type</span>
-                <span className="font-semibold text-slate-800">{form.type || "—"}</span>
+                <span className="font-semibold text-slate-800">
+                  {selectedCategory?.crime_types?.find((t) => String(t.id) === String(form.type))?.name || "—"}
+                </span>
               </div>
               <div className="flex justify-between border-b border-slate-100 py-2">
                 <span className="text-slate-500">Location</span>
@@ -155,7 +214,7 @@ export default function ReportCrime() {
               </div>
               <div className="flex justify-between py-2">
                 <span className="text-slate-500">Status</span>
-                <span className="badge bg-slate-100 text-slate-700">Submitted</span>
+                <span className="badge bg-slate-100 text-slate-700">{formatStatus(submitStatus)}</span>
               </div>
             </div>
 
@@ -182,6 +241,11 @@ export default function ReportCrime() {
       </div>
 
       <div className="card p-6 sm:p-8">
+        {lookupError && (
+          <p className="mb-4 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            {lookupError} — start the Laravel API with <code className="text-xs">php artisan serve</code>.
+          </p>
+        )}
         <Stepper current={step} />
 
         <div className="mt-8">
@@ -194,8 +258,8 @@ export default function ReportCrime() {
                   <label className="label">Crime Category</label>
                   <select className="input" value={form.category} onChange={(e) => { update("category", e.target.value); update("type", ""); }}>
                     <option value="">Select a category</option>
-                    {crimeCategories.map((c) => (
-                      <option key={c.id} value={c.id}>{c.label}</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
                     ))}
                   </select>
                 </div>
@@ -203,8 +267,8 @@ export default function ReportCrime() {
                   <label className="label">Crime Type</label>
                   <select className="input" value={form.type} onChange={(e) => update("type", e.target.value)} disabled={!selectedCategory}>
                     <option value="">{selectedCategory ? "Select a type" : "Choose category first"}</option>
-                    {selectedCategory?.types.map((t) => (
-                      <option key={t} value={t}>{t}</option>
+                    {selectedCategory?.crime_types?.map((t) => (
+                      <option key={t.id} value={t.id}>{t.name}</option>
                     ))}
                   </select>
                 </div>
@@ -220,7 +284,7 @@ export default function ReportCrime() {
                   <label className="label">Zone / Area in Koforidua</label>
                   <select className="input" value={form.zone} onChange={(e) => update("zone", e.target.value)}>
                     <option value="">Select a zone</option>
-                    {zones.map((z) => <option key={z} value={z}>{z}</option>)}
+                    {zones.map((z) => <option key={z.id} value={z.id}>{z.name}</option>)}
                   </select>
                 </div>
                 <div>
@@ -350,10 +414,10 @@ export default function ReportCrime() {
               <h2 className="font-display text-lg font-bold text-police-900">Step 5 · Review & Submit</h2>
               <div className="space-y-4">
                 <ReviewBlock title="Incident Information" items={[
-                  ["Category", selectedCategory?.label],
-                  ["Type", form.type],
+                  ["Category", selectedCategory?.name],
+                  ["Type", selectedCategory?.crime_types?.find((t) => String(t.id) === String(form.type))?.name],
                   ["Date & Time", [form.date, form.time].filter(Boolean).join(" ")],
-                  ["Zone", form.zone],
+                  ["Zone", zones.find((z) => String(z.id) === String(form.zone))?.name],
                   ["Municipality", municipality.name],
                   ["Location", form.location],
                   ["GPS", form.gps],
@@ -389,13 +453,16 @@ export default function ReportCrime() {
             <ChevronLeft className="h-4 w-4" /> Back
           </button>
           <span className="text-xs font-medium text-slate-400">Step {step} of 5</span>
+          {submitError && (
+            <p className="absolute left-1/2 -translate-x-1/2 text-sm text-red-500">{submitError}</p>
+          )}
           {step < 5 ? (
             <button onClick={next} className="btn-primary">
               Continue <ChevronRight className="h-4 w-4" />
             </button>
           ) : (
-            <button onClick={() => setSubmitted(true)} className="btn-gold">
-              <Check className="h-4 w-4" /> Submit Report
+            <button onClick={submitReport} disabled={submitting} className="btn-gold disabled:opacity-60">
+              <Check className="h-4 w-4" /> {submitting ? "Submitting…" : "Submit Report"}
             </button>
           )}
         </div>

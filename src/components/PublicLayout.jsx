@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
-import { Menu, X, LogIn } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
 import Footer from "./Footer";
 import EmergencyBar from "./EmergencyBar";
@@ -9,7 +9,6 @@ const navLinks = [
   { to: "/", label: "Home", end: true },
   { to: "/report", label: "Report Crime" },
   { to: "/track", label: "Track Report" },
-  { to: "/dashboard", label: "Police Portal" },
 ];
 
 export default function PublicLayout() {
@@ -43,9 +42,6 @@ export default function PublicLayout() {
           </nav>
 
           <div className="hidden items-center gap-3 md:flex">
-            <Link to="/login" className="btn-outline">
-              <LogIn className="h-4 w-4" /> Officer Login
-            </Link>
             <Link to="/report" className="btn-gold">
               Report Crime
             </Link>
@@ -78,14 +74,9 @@ export default function PublicLayout() {
                   {l.label}
                 </NavLink>
               ))}
-              <div className="mt-2 flex gap-2">
-                <Link to="/login" onClick={() => setOpen(false)} className="btn-outline flex-1">
-                  Officer Login
-                </Link>
-                <Link to="/report" onClick={() => setOpen(false)} className="btn-gold flex-1">
-                  Report Crime
-                </Link>
-              </div>
+              <Link to="/report" onClick={() => setOpen(false)} className="btn-gold mt-2">
+                Report Crime
+              </Link>
             </nav>
           </div>
         )}

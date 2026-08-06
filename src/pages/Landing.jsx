@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import * as Icons from "lucide-react";
 import { ShieldCheck, FileText, Search, MapPin, ArrowRight, Phone, CheckCircle2 } from "lucide-react";
-import { landingStats, features } from "../data/mock";
+import { features } from "../data/constants";
+import { api } from "../lib/api";
+import { formatDate, formatStatus } from "../lib/utils";
 
 function StatPill({ stat }) {
   const Icon = Icons[stat.icon] || Icons.Activity;
@@ -13,7 +16,7 @@ function StatPill({ stat }) {
         </div>
         <div>
           <p className="font-display text-2xl font-extrabold text-police-900">{stat.value}</p>
-          <p className="text-xs font-medium text-emerald-600">{stat.trend} this year</p>
+          {stat.trend && <p className="text-xs font-medium text-emerald-600">{stat.trend} this year</p>}
         </div>
       </div>
       <p className="mt-4 text-sm font-medium text-slate-500">{stat.label}</p>
@@ -22,9 +25,34 @@ function StatPill({ stat }) {
 }
 
 export default function Landing() {
+  const [stats, setStats] = useState([]);
+  const [demoCase, setDemoCase] = useState(null);
+
+  useEffect(() => {
+    api.getLandingStats()
+      .then((res) => setStats(res.data || []))
+      .catch(() => setStats([]));
+
+    api.trackReport("KFD-2026-489201")
+      .then((res) => setDemoCase(res.data))
+      .catch(() => setDemoCase(null));
+  }, []);
+
+  const timelineSteps = demoCase?.timeline?.length
+    ? demoCase.timeline.map((t, i) => ({
+        label: formatStatus(t.event === "status_changed" ? demoCase.status : t.event),
+        done: i < demoCase.timeline.length - 1,
+        active: i === demoCase.timeline.length - 1,
+      }))
+    : [
+        { label: "Submitted", done: true },
+        { label: "Assigned to Officer", done: true },
+        { label: "Under Investigation", done: true, active: true },
+        { label: "Resolved", done: false },
+      ];
+
   return (
     <div>
-      {/* HERO */}
       <section className="relative overflow-hidden bg-police-900 text-white">
         <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "28px 28px" }} />
         <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-gold-400/10 blur-3xl" />
@@ -40,8 +68,8 @@ export default function Landing() {
               <span className="text-gold-400">Securely</span>
             </h1>
             <p className="mt-5 max-w-xl text-lg text-slate-300">
-            Helping Koforidua communities fight crime through timely reporting. File a report in minutes,
-            track its progress, and reach emergency services across the municipality.
+              Helping Koforidua communities fight crime through timely reporting. File a report in minutes,
+              track its progress, and reach emergency services across the municipality.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -65,7 +93,6 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Hero card */}
           <div className="relative">
             <div className="card relative z-10 mx-auto max-w-md p-6 text-slate-800">
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
@@ -74,48 +101,56 @@ export default function Landing() {
                     <ShieldCheck className="h-5 w-5 text-gold-400" />
                   </div>
                   <div>
-                    <p className="font-display text-sm font-bold text-police-900">Case KFD-2026-489201</p>
-                    <p className="text-xs text-slate-400">Filed 2 days ago · Jackson's Park, Koforidua</p>
+                    <p className="font-display text-sm font-bold text-police-900">
+                      Case {demoCase?.case_id || "KFD-2026-489201"}
+                    </p>
+                    <p className="text-xs text-slate-400">
+                      {demoCase
+                        ? `Filed ${formatDate(demoCase.filed_at)} · ${demoCase.location}, ${demoCase.zone}`
+                        : "Live case from database"}
+                    </p>
                   </div>
                 </div>
-                <span className="badge bg-amber-100 text-amber-700">Investigating</span>
+                <span className="badge bg-amber-100 text-amber-700">
+                  {demoCase ? formatStatus(demoCase.status) : "Investigating"}
+                </span>
               </div>
 
               <div className="mt-4 space-y-4">
-                {[
-                  { label: "Submitted", done: true },
-                  { label: "Assigned to Officer", done: true },
-                  { label: "Under Investigation", done: true, active: true },
-                  { label: "Resolved", done: false },
-                ].map((s, i) => (
+                {timelineSteps.map((s, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <div className={`grid h-7 w-7 place-items-center rounded-full text-xs ${s.done ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-400"} ${s.active ? "ring-4 ring-emerald-100" : ""}`}>
-                      {s.done ? <CheckCircle2 className="h-4 w-4" /> : i + 1}
+                    <div className={`grid h-7 w-7 place-items-center rounded-full text-xs ${s.done || s.active ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-400"} ${s.active ? "ring-4 ring-emerald-100" : ""}`}>
+                      {s.done || s.active ? <CheckCircle2 className="h-4 w-4" /> : i + 1}
                     </div>
-                    <p className={`text-sm ${s.done ? "font-semibold text-slate-800" : "text-slate-400"}`}>{s.label}</p>
+                    <p className={`text-sm ${s.done || s.active ? "font-semibold text-slate-800" : "text-slate-400"}`}>{s.label}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-5 rounded-xl bg-police-50 p-3 text-xs text-police-700">
-                <span className="font-semibold">Live update:</span> Your assigned officer added a note 4 hours ago.
-              </div>
+              {demoCase?.timeline?.length > 0 && (
+                <div className="mt-5 rounded-xl bg-police-50 p-3 text-xs text-police-700">
+                  <span className="font-semibold">Latest:</span> {demoCase.timeline[demoCase.timeline.length - 1].note}
+                </div>
+              )}
             </div>
             <div className="absolute -right-4 -top-4 h-24 w-24 rounded-2xl bg-gold-400/20 blur-xl" />
           </div>
         </div>
       </section>
 
-      {/* STATISTICS */}
       <section className="mx-auto -mt-10 max-w-7xl px-4">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {landingStats.map((s) => (
+          {(stats.length ? stats : [
+            { label: "Total Reports Received", value: "0", icon: "FileText" },
+            { label: "Cases Under Investigation", value: "0", icon: "Search" },
+            { label: "Cases Resolved", value: "0", icon: "ShieldCheck" },
+            { label: "Police Stations in Koforidua", value: "5", icon: "Building2" },
+          ]).map((s) => (
             <StatPill key={s.label} stat={s} />
           ))}
         </div>
       </section>
 
-      {/* FEATURES */}
       <section className="mx-auto max-w-7xl px-4 py-20">
         <div className="mx-auto max-w-2xl text-center">
           <span className="badge bg-gold-100 text-gold-700">Why use this portal</span>
@@ -144,7 +179,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
       <section className="bg-white py-20">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mx-auto max-w-2xl text-center">
@@ -175,7 +209,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="mx-auto max-w-7xl px-4 py-16">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-police-800 to-police-900 px-8 py-14 text-center text-white">
           <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gold-400/10 blur-3xl" />

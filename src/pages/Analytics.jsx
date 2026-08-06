@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -17,14 +18,7 @@ import {
 } from "recharts";
 import { MapPin, Building2, Flame, Calendar } from "lucide-react";
 import ChartCard from "../components/ChartCard";
-import {
-  crimeTrend,
-  reportsByRegion,
-  categoryDistribution,
-  resolutionRates,
-  hotspots,
-  stations,
-} from "../data/mock";
+import { api } from "../lib/api";
 
 const tooltipStyle = {
   borderRadius: 12,
@@ -33,15 +27,41 @@ const tooltipStyle = {
   fontSize: 12,
 };
 
-const radialData = resolutionRates.map((r, i) => ({
-  name: r.zone,
-  rate: r.rate,
-  fill: ["#003366", "#1f5d99", "#F4B400", "#4a7cb0", "#d99e00", "#7099c2"][i],
-}));
-
 const levelColor = { high: "#ef4444", medium: "#f4b400", low: "#22c55e" };
 
 export default function Analytics() {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    api.getAnalytics()
+      .then(setData)
+      .catch((err) => setError(err.message));
+  }, []);
+
+  if (error) {
+    return <div className="card p-8 text-center text-sm text-red-500">{error}</div>;
+  }
+
+  if (!data) {
+    return <div className="card p-8 text-center text-sm text-slate-400">Loading analytics…</div>;
+  }
+
+  const {
+    crime_trend: crimeTrend,
+    reports_by_zone: reportsByRegion,
+    category_distribution: categoryDistribution,
+    resolution_rates: resolutionRates,
+    hotspots,
+    stations,
+  } = data;
+
+  const radialData = resolutionRates.map((r, i) => ({
+    name: r.zone,
+    rate: r.rate,
+    fill: ["#003366", "#1f5d99", "#F4B400", "#4a7cb0", "#d99e00", "#7099c2"][i % 6],
+  }));
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -54,10 +74,9 @@ export default function Analytics() {
         </div>
       </div>
 
-      {/* Interactive Map */}
       <ChartCard
         title="Koforidua Crime Hotspot Map"
-        subtitle="Live incident density across Koforidua zones"
+        subtitle="Incident density across Koforidua zones"
         action={
           <div className="flex items-center gap-3 text-xs">
             {Object.entries(levelColor).map(([k, c]) => (
@@ -69,17 +88,14 @@ export default function Analytics() {
         }
       >
         <div className="relative h-[360px] overflow-hidden rounded-xl border border-slate-200 bg-[#e8eef5]">
-          {/* Stylized map backdrop */}
           <div className="absolute inset-0 opacity-60" style={{
-            backgroundImage:
-              "linear-gradient(#cdd9e8 1px, transparent 1px), linear-gradient(90deg, #cdd9e8 1px, transparent 1px)",
+            backgroundImage: "linear-gradient(#cdd9e8 1px, transparent 1px), linear-gradient(90deg, #cdd9e8 1px, transparent 1px)",
             backgroundSize: "40px 40px",
           }} />
           <div className="absolute left-[10%] top-[20%] h-40 w-56 rounded-[40%] bg-police-100/70" />
           <div className="absolute right-[14%] top-[40%] h-48 w-64 rounded-[45%] bg-police-100/60" />
           <div className="absolute bottom-[10%] left-[30%] h-36 w-72 rounded-[50%] bg-emerald-100/50" />
 
-          {/* Stations */}
           {stations.map((s) => (
             <div key={s.name} className="group absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${s.x}%`, top: `${s.y}%` }}>
               <div className="grid h-7 w-7 place-items-center rounded-lg bg-police-800 text-white shadow-lg ring-2 ring-white">
@@ -91,7 +107,6 @@ export default function Analytics() {
             </div>
           ))}
 
-          {/* Hotspots */}
           {hotspots.map((h) => (
             <div key={h.name} className="group absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${h.x}%`, top: `${h.y}%` }}>
               <span className="absolute inset-0 m-auto h-6 w-6 rounded-full animate-pulse-ring" style={{ background: levelColor[h.level] }} />
@@ -99,18 +114,17 @@ export default function Analytics() {
                 <MapPin className="h-3.5 w-3.5" />
               </div>
               <span className="pointer-events-none absolute left-1/2 top-7 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-0.5 text-[10px] text-white opacity-0 transition group-hover:opacity-100">
-                {h.name} · {h.count} incidents
+                {h.name} · {h.count} incident{h.count !== 1 ? "s" : ""}
               </span>
             </div>
           ))}
 
           <div className="absolute bottom-3 right-3 flex items-center gap-2 rounded-lg bg-white/90 px-3 py-1.5 text-xs font-medium text-slate-600 shadow">
-            <Flame className="h-3.5 w-3.5 text-red-500" /> 6 active hotspots
+            <Flame className="h-3.5 w-3.5 text-red-500" /> {hotspots.length} active hotspot{hotspots.length !== 1 ? "s" : ""}
           </div>
         </div>
       </ChartCard>
 
-      {/* Charts grid */}
       <div className="grid gap-6 lg:grid-cols-2">
         <ChartCard title="Crime Trends" subtitle="Reported vs resolved over 12 months">
           <ResponsiveContainer width="100%" height={280}>
@@ -172,7 +186,6 @@ export default function Analytics() {
         </ChartCard>
       </div>
 
-      {/* Monthly reports full width */}
       <ChartCard title="Monthly Reports" subtitle="Incident volume per month">
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={crimeTrend} margin={{ left: -20, right: 10 }}>

@@ -1,0 +1,660 @@
+﻿
+
+
+Design and Implementation of a Crime Reporting Web Application
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ABSTRACT
+Crime is part of human activities and needs to be managed. No human society has ever been totally free of deviants and it is unlikely that society will ever be. The more populated and complex a society becomes, the wider the range of antisocial conducts that must be controlled by the government through the armed forces and other agencies, especially the Police Force.
+The incident-based system reports on a much broader range of crimes and includes data on the circumstances of the crime, the victim, and the defendant. The current crime reporting system is faced with several difficulties as there is no instant means of reporting crime other than telephone calls, messaging, or perhaps face to face, which is usually cumbersome, especially where the reporter wishes to keep anonymity.
+The proposed crime reporting system aims to assist the Ghana Police in their offer to solve crimes with timely and useful information about criminals and/or their mode of operations so as to nip in the bud criminal activities in a given locality.
+Finally, a prototype crime reporting system was designed that relies on four reporting forms: a complaint or dispatch reporting form, a crime event report form, follow up investigation report form, and an arrest report form. The system consists of three functional modules: a data capture module, a report management and control module, and a data utilization module.
+Future work on crime reporting system can be tailored towards accessibility (mobile version), awareness, and improvement in usage.
+
+
+
+
+
+
+
+CHAPTER ONE
+1.0 INTRODUCTION
+Modern society is characterized by increasing levels of global social mobility and uncertainty relating to levels of risk posed by internal and external security threats. Within this climate security driven by technology is increasingly being used by governments, corporate bodies and individuals to monitor and reduce risk. There has been an acceptance that the criminal justice system is limited in its capacity to control crime which has led to the exploration of other avenues for tackling crime and this has provided a market for private companies to push forward the growth of technological security innovations. Crime is a human experience and is as old as the human race. Crime is geographical. It occurs at a specific place, specific time and for a specific reason. It can affect everyone and anyone at any time.
+Both Information Technology (IT) and crime are complex and constantly changing. Social and technological changes introduce new targets, tools and motives for crime. Ecrime targets include confidential information, technical infrastructure and denial of service. Improved and faster technology and worldwide communications make it easier to both organize and conceal crime. Software to help criminals is available, even as commercial products: criminals have used attack testing software to probe the security of target systems. Motivations now include terrorism and revenge as well as traditional desires for financial gain.
+Terrorists might not be rational in their motivation; casual opportunists look for an open door; organized crime will evaluate potential gains against investment – which might be massive if the potential rewards are attractive enough.
+1.1 BACKGROUND OF THE STUDY
+Crime reporting is the first of the nine basic Youth Crime Watch components. Most simply, it's giving the proper authorities information you have about crime that might be committed, crime that has been committed, someone who was involved in committing a crime. Young people understand the importance of reporting crime. They want safer schools and neighborhoods, and if they know how to report effectively, they'll do it. Young people can help encourage peers to report crime in the making as well as information on crimes under investigation.
+Online Crime Report System helps in getting the different police stations to share information and get in contact with one another, the aim of this project is to develop an online crime reporting and management system which is easily accessible to the public, the police department and the administrative department. The crime information dictionary provides a facility of reporting crime, Searching, different crime ratio and most wanted criminals online.
+With the increase of communication system and management applications in our daytoday life and public service sector developing online crime reporting system will be a helpful software application. This application works on web where public and police department can use to get effective service compare to the existing manual record management method.
+1.2 STATEMENT OF RESEARCH PROBLEM
+Crime is part of human activities and needs to be managed. No human society has ever been totally free of deviants and it is unlikely that society will ever be. The more populated and complex a society becomes the wider the range of antisocial conduct that must be controlled by government using police power. The incident based system reports on a much broader range of crimes and includes data on the circumstances of the crime, the victim, and the defendant. The current crime reporting system is faced with several difficulties as there is no instant means of reporting crime rather than telephone calls, messaging or perhaps face to face which is always cumbersome in a case the reporter might want to keep anonymity. To strengthen crime reporting system, an online system is enhanced to fully take the responsibility of reporting crime in a manner that will be useful to the Ghanaian Police Force (NPF). For instance, in cases involving property crime the incidentbased system will report on the:
+i. Type and description of the article;
+ii. Its value;
+iii. Type of loss (e.g., stolen, vandalized);
+iv. type of victim (e.g., individual, business);
+v. And location of crime (e.g., convenience store, residence).
+1.3 OBJECTIVES OF THE STUDY
+The objective of this research work is centered on the research topic itself, which is to design and implement a web based application for crime reporting which will be developed using the web platform tools.
+The aim of CRS is to assist the Ghanaian Police Force (NPF) in their bid to solve crimes with timely and useful information about criminals and/or their mode of operations so as to nip in the bud criminal activities in a given locality.
+Other of its objective are:
+To review what has been done so far relating to this research work.
+To develop software that will receive and store crime reports.
+To make the crime records available online to facilitate distribution to different police stations.
+To provide a deterministic crime reporting model
+To create a distributed data warehouse for crime reporting based on the model.
+1.4 SIGNIFICANCE OF THE STUDY
+The enhanced data quality of the incident based reporting system will be of significant benefit to state and local governing bodies, criminal justice agencies, and the public. Data from the incident based system will enhance both strategic and tactical decision making in criminal justice.
+Because incident based data will provide a more accurate picture of a community's crime patterns, decisions regarding law enforcement, judicial, and correctional resources can be made based on empirical data. Similarly, the level of detail provided by incident based data can assist law enforcement agencies and the community to identify crime problems in their community such as:
+i. Crime hotspots
+ii. Populations who are at risk and
+iii. Drug and alcohol problems.
+Crime prevention strategies may then be developed and evaluated based on empirical evidence. This study will also assist policy analyst to understand both factors that impedes the efficiency and effectiveness of the police and the ways by which the situation could be improved upon so as to bring crime and disorders in the society to its barest minimum. Finally, this study will go a long way in contributing to the knowledge of police work. Besides, other researchers and students in higher institutions especially those in sociology department can derive various secondary data from this study.
+1.5 SCOPE OF THE STUDY
+This study is research geared towards correcting the factors affecting the crime reporting, investigation and correction role of the Ghana police. In view of the scope, an online crime reporting application will be implemented.
+1.6 PURPOSE OF THE PROJECT
+The aim of this project is to develop an online crime report and managing system which is easily accessible to the public. The police department and the administrative department.
+This system registers the complaints from people through online and it will also helpful to police department in catching criminals, in system and person can give any complaint at any tie.
+1.7 PROBLEM IN EXISTING SYSTEM
+In general people in Ghana are afraid to give a complaint in police station because they are filled with a false fear about the police department. An online complaint registration system will solve the fear of the public and which also helps police department catching criminals and taking appropriate action.
+PROPOSED SYSTEM:
+An online solution is very useful as the solution is inherently distributive. This distributive characteristic of the online solution helps in getting the different police stations to share information and get in contact with one another. A web application is to manage criminal details in a centralized database and provide solution for public to give complaint through online and get online service.
+1.8 LIMITATION OF THE STUDY
+This project was constrained by the following factors:
+(a) Financial Constraints: Bearing in mind the economic state of the nation, it was found difficult in making both ends meet, because of the exorbitant nature of things nowadays in travelling for the collection of data needed for the project.
+(b) Time Constraints: Looking at the interval between the resumption and vacation of the final semester for the project to be completed, the time given seemed to be short for the collection of required information for better work to be done.
+(c) Non Availability of Material: During this project, it was noticed that the required materials needed for the project are not documented. Those that were documented lacked storage facilities where they can be reached.
+1.9 DEFINITION OF TERMS
+SYSTEM SECURITY refers to the technical innovations and procedures applied to the hardware and operation systems to protect against deliberate or accidental damage from a defined threat.
+DATA SECURITY is the protection of data from loss, disclosure, modification and destruction.
+SYSTEM INTEGRITY refers to the power functioning of hardware and programs, appropriate physical security and safety against external threats such as eavesdropping and wiretapping.
+PRIVACY defines the rights of the user or organizations to determine what information they are willing to share with or accept from others and how the organization can be protected against unwelcome, unfair or excessive dissemination of information about it.
+CONFIDENTIALITY is a special status given to sensitive information...
+
+
+
+
+2.1 Conceptual Overview of Crime
+Crime is a universal social phenomenon that persists as long as human society exists. Societies across the world including Ghana have long recognized and condemned criminal activity as a fundamental threat to collective safety, social cohesion, and shared values. The conceptualization of crime is not monolithic; it has evolved through centuries of legal scholarship, sociological inquiry, and cultural negotiation.
+Etymologically, the word 'crime' derives from the Latin crimen, meaning 'charge' or 'offence' (Shodghangha, 2011). Early definitions were largely legalistic in orientation. Tappan (2001) defined crime as an intentional act committed in violation of criminal law, absent any legally recognized excuse or justification. Similarly, Sampson et al. (1993) described crime as any act or omission forbidden by law and punishable by imprisonment and/or fine following due legal process. A broader view was offered by Elizabeth (2003), who emphasized that crime is not merely injurious to individual victims but constitutes harm to the state and the general public.
+Contemporary scholars have moved beyond purely legalistic definitions. The United Nations Office on Drugs and Crime (UNODC, 2022) frames crime as a socially constructed category shaped by political, economic, and cultural forces, noting that what is criminalized in one jurisdiction may be lawful in another. In Ghana, the 1960 Criminal and Other Offences Act (Act 29) and its successive amendments provide the statutory framework for defining and prosecuting criminal behaviour, reflecting both inherited colonial legal structures and evolving indigenous jurisprudence (Atuguba, 2021).
+The question of whether a universal theory of crime is possible remains contested. Wilson et al. (1985) argued that the diversity of human society and culture renders any universal definition inadequate. In contrast, Gottfredson et al. (1990) and Sampson et al. (1993) contended that underlying commonalities across cultures can form the basis for a general theory of crime. More recent biosocial models proposed by Farrington et al. (2021) recognize the interplay of biological predispositions, psychological traits, and social environments a framework applicable to Ghanaian contexts where rapid urbanization and economic inequality are reshaping crime patterns (Atuguba, 2021; Boateng, 2018).
+Contemporary scholars have sought to move beyond purely legalistic definitions. The United Nations Office on Drugs and Crime (UNODC, 2022) frames crime as a socially constructed category shaped by political, economic, and cultural forces, noting that what is criminalized in one jurisdiction may be lawful in another. This pluralistic understanding reflects the complexity of defining crime in an increasingly interconnected, multicultural global society.
+At the continental level, the African Development Bank (2022) identifies governance deficits, youth unemployment, and poverty as the primary structural drivers of elevated crime rates across subSaharan Africa. Ghana, while generally regarded as one of West Africa's more politically stable nations, has experienced rising crime rates particularly in urban centres as it navigates rapid economic transformation and demographic growth (Ghana Police Service, 2022).
+2.1.1 Crime and the Criminal Justice System in Ghana
+The effective management of crime depends on the institutional architecture of the criminal justice system encompassing law enforcement, prosecution, courts, and corrections. Ghana's criminal justice system is governed by the 1992 Constitution, the Criminal and Other Offences (Procedure) Act 1960 (Act 30), and the Courts Act 1993 (Act 459), and is administered through the Ghana Police Service (GPS), the Office of the Attorney General, the Judiciary, and the Ghana Prisons Service
+Despite a comparatively stable institutional framework, Ghana's justice system faces persistent challenges. Asante and Gyamfi (2020) documented systemic problems including overcrowded prisons, prolonged pretrial detention, inadequate legal aid for the poor, and a severe shortage of prosecutors and magistrates in rural districts. The Commission on Human Rights and Administrative Justice (CHRAJ) has repeatedly flagged corruption within law enforcement as a key obstacle to impartial justice delivery.
+The broader criminological literature underscores the importance of procedural legitimacy the perception by citizens that the justice system operates fairly and transparently. Tyler (2006) demonstrated that communities who believe the justice system is fair are more likely to cooperate with law enforcement and report crimes. Conversely, when the system is perceived as biased or corrupt, underreporting becomes endemic and extrajudicial responses proliferate. Boateng (2012) found this dynamic particularly pronounced in Ghanaian communities, where distrust of the police rooted in historical abuses and perceived partisanship significantly depresses official crime reporting rates.
+This dark figure of crime' incidents that occur but are never officially recorded distorts policy responses and resource allocation. The emergence of ecrime reporting platforms, discussed in detail in Section 2.4, represents a critical opportunity to bridge the gap between actual crime incidence and official records in Ghana's justice ecosystem.
+2.2 Classification and Types of Crime in Ghana
+Ghana's crime landscape is multidimensional, spanning conventional street crime, sophisticated financial offences, cybercrime, and forms of collective violence. Drawing on Otwin et al.'s (1995) foundational taxonomy normal crimes, political economic crimes, and riotous crimes  and adapting it to the Ghanaian context, this section reviews the major categories of criminal activity as documented in current empirical literature and official data from the Ghana Police Service (GPS).
+Ghana Police Service Annual Crime Statistics (GPS, 2022) reveal that reported crimes have increased significantly over the past decade, with urban regions particularly Greater Accra and Ashanti accounting for the majority of recorded incidents. Cybercrime and fraud have emerged as the fastestgrowing crime categories, reflecting Ghana's rapid digital expansion. The tables below present crime incidence data across Ghanaian regions.
+Region
+Crime Type(s)
+Reported Cases
+Fatalities
+Year
+Greater Accra
+Armed Robbery
+1,842
+312
+2021
+Greater Accra
+Rape / Sexual Assault
+438
+–
+2021
+Ashanti
+Armed Robbery
+1,204
+198
+2021
+Ashanti
+Defilement
+612
+–
+2021
+Western
+Robbery, Drug Offences
+487
+74
+2021
+Central
+Assault, Theft
+374
+31
+2021
+Eastern
+Robbery, Kidnapping
+291
+22
+2021
+Northern
+Communal Violence
+183
+47
+2021
+Upper East
+Chieftaincy Disputes
+97
+18
+2021
+Upper West
+Armed Robbery, Assault
+76
+9
+2021
+Volta
+Robbery, Land Disputes
+214
+29
+2021
+Bono
+Drug Trafficking, Theft
+162
+11
+2021
+Greater Accra
+Cybercrime / Fraud
+2,103
+–
+2022
+Ashanti
+Cybercrime / Fraud
+1,576
+–
+2022
+Greater Accra
+Domestic Violence
+1,247
+–
+2022
+Ashanti
+Domestic Violence
+893
+–
+2022
+TOTAL
+
+11,800+
+751+
+2021–22
+Table 2.1: Reported Crimes by Region, Crime Type, and Fatalities in Ghana, 2021–2022 (Adapted from Ghana Police Service Annual Report, 2022)
+Region
+Armed Robbery
+Defilement
+Assault
+Rape
+Dom. Violence
+Cybercrime/Fraud
+Greater Accra
+1,842
+284
+1,103
+438
+1,247
+2,103
+Ashanti
+1,204
+612
+874
+311
+893
+1,576
+Western
+487
+193
+412
+147
+302
+389
+Central
+374
+148
+298
+92
+214
+276
+Eastern
+291
+176
+241
+88
+198
+311
+Volta
+214
+97
+183
+61
+142
+187
+Northern
+183
+64
+312
+39
+118
+74
+Bono
+162
+82
+194
+54
+109
+163
+Upper East
+97
+51
+132
+28
+76
+48
+Upper West
+76
+38
+98
+19
+59
+37
+Oti
+68
+42
+87
+24
+63
+52
+Savannah
+54
+31
+74
+16
+47
+29
+Table 2.2: Crime Incidents by Category and Region in Ghana (Adapted from Ghana Police Service, 2022; Boateng, 2018)
+2.2.1 Normal Crimes
+Normal crimes encompassing theft, armed robbery, assault, rape, defilement, and homicide  constitute the most visible and frequently reported category of criminal activity in Ghana. The GPS (2022) Annual Crime Report recorded over 11,800 major criminal incidents across Ghana's sixteen regions in 2021–2022, with Greater Accra and Ashanti consistently recording the highest absolute figures due to their population density and urbanization levels.
+Armed robbery has been a persistent feature of Ghana's crime landscape. Boateng (2018) documented a direct correlation between urban youth unemployment and armed robbery rates, particularly in Accra's peri urban communities such as Ashaiman, Nima, and Madina. The proliferation of small arms a spillover effect of regional conflicts in the Sahel and Guinea Coast has intensified the lethality of armed robberies, transforming what were once opportunistic property crimes into violent confrontations (Aning & Bah, 2020).
+Sexual and gender based violence (SGBV) represents one of Ghana's most serious criminal challenges. The Domestic Violence and Victim Support Unit (DOVVSU) of the GPS reported over 15,000 SGBV cases in 2021, with defilement (sexual abuse of minors) constituting the largest single category (DOVVSU, 2022). Despite the passage of the Domestic Violence Act (Act 732) in 2007 and the Human Trafficking Act (Act 694) in 2005, enforcement remains inconsistent, particularly in rural and peri urban areas where traditional norms impede reporting.
+Cybercrime locally termed 'Sakawa’ has emerged as a defining feature of Ghana's contemporary crime landscape. The Ghana Cybersecurity Authority (CSA, 2022) recorded over 3,600 cybercrime related complaints in 2022, including online fraud, identity theft, romance scams, and mobile money fraud. Ghana ranked among the top five African countries most affected by cybercrime losses in 2021, with estimated financial losses exceeding GHS 500 million annually (CSA, 2022; Interpol, 2022).
+2.2.2 Political Economic Crimes
+Political and economic crimes in Ghana operate across a broad spectrum, from procurement fraud at the institutional level to grand corruption involving state resources. Odekunle's (1986) classification of elite crimes encompassing white collar offences, political corruption, and organized crime remains analytically useful when applied to the Ghanaian context, where successive administrations have grappled with corruption within public institutions.
+Ghana's anticorruption architecture includes the Economic and Organised Crime Office (EOCO), the Office of the Special Prosecutor (OSP) established in 2017 and the Commission on Human Rights and Administrative Justice (CHRAJ). Notwithstanding these institutions, Transparency International's Corruption Perceptions Index (CPI, 2023) ranked Ghana 70th out of 180 countries, with a score of 43/100 indicating significant levels of perceived public sector corruption.
+Electoral crime has also featured in Ghana's democratic experience. Although Ghana is widely praised for peaceful democratic transitions, Frempong (2020) documented instances of voter intimidation, electoral violence, and vote buying in competitive constituencies during the 2020 general elections. The Electoral Commission of Ghana and civil society organizations have called for stronger enforcement of electoral offences under the Representation of the People Act.
+Money laundering and illicit financial flows represent another dimension of political economic crime. The Financial Intelligence Centre (FIC, 2022) reported a marked increase in suspicious transaction reports, driven in part by the expansion of mobile money platforms and informal financial networks. Globally, the Financial Action Task Force (FATF) placed Ghana on its 'grey list' in 2021 a designation removed in 2023 following legislative and institutional reforms  reflecting the seriousness of financial crime vulnerabilities (FATF, 2023).
+2.2.3 Riotous and Communal Crimes
+Riotous crimes acts of collective violence that, if perpetrated individually, would constitute clear criminal offences have occurred with notable regularity in Ghana, most commonly arising from chieftaincy disputes, land conflicts, ethnoreligious tensions, and political rivalries. As Gurr et al. (1971) observed, riots create conditions in which ordinary legal norms are suspended and mass property destruction, assault, and killing occur.
+Ghana's most persistent form of communal violence is chieftaincy related conflict. The National Peace Council (NPC, 2022) documented over 30 active chieftaincy disputes across Ghana's regions in 2022, with flashpoints including the Bawku conflict in the Upper East Region a long running intercommunal violence rooted in contested traditional authority between the Kusasi and Mamprusi ethnic groups. The conflict has resulted in hundreds of deaths and significant internal displacement over decades (Langer et al., 2020). Galamsey illegal small scale mining has generated a distinct form of criminal violence in Ghana's forest and mining belts, particularly in Ashanti, Western, and Eastern regions. Beyond environmental destruction, galamsey networks are associated with extortion, assault, illegal firearms possession, and corruption of local officials. The government's Operation Halt II (2021) and subsequent enforcement campaigns have had limited sustained impact, reflecting the deep economic incentives driving illegal mining (Teschner, 2021).
+The Internal Displacement Monitoring Centre (IDMC, 2023) reported approximately 6,000 internally displaced persons in Ghana as a result of communal and interethnic violence in 2022  a figure that, while lower than many regional neighbours, underscores the continued human cost of riotous crime and the inadequacy of existing conflict resolution infrastructure.
+2.3 Factors Contributing to Criminal Behaviour in Ghana
+Understanding the root causes of crime is foundational to effective prevention and intervention. Sampson et al. (1993) and Blau et al. (1984) argued that crime is fundamentally a social phenomenon shaped by societal structure rather than innate individual pathology. The criminological literature broadly organizes causal factors into general (ordinary) factors that affect society as a whole, and specific factors operating at the individual and family level.
+2.3.1 General Factors
+General factors encompass broad environmental and structural conditions that create social contexts in which crime flourishes. These include geographical, sociological, physiological, and atmospheric dimensions.
+2.3.1.1 Geographical and Environmental Factors
+Environmental criminology recognizes the influence of physical space on criminal behaviour. Brantingham and Brantingham (1981) demonstrated that crime is not randomly distributed in space but clusters in environments where offenders' routines intersect with suitable targets and inadequate guardianship. In Ghana, crime rates are disproportionately concentrated in urban centres particularly Accra, Kumasi, and Sekondi Takoradi where population density, anonymity, and economic inequality converge (Boateng, 2018; Ghana Statistical Service, 2021).
+The design of Ghana's rapidly growing urban informal settlements characterized by overcrowding, poor street lighting, inadequate public spaces, and weak community organization creates environmental conditions conducive to crime. Cozens (2022) advocates for Crime Prevention Through Environmental Design (CPTED) as a cost effective strategy applicable to Ghanaian urban planning, arguing that well designed public spaces can significantly reduce opportunistic crime. Singh (1964) similarly noted that geographical and physical settings shape social organization and, by extension, criminal propensity.
+2.3.1.2 Sociological Factors
+Social disorganization theory articulated by Shaw and McKay (1942) and extended by Sampson et al. (1997) through the concept of collective efficacy holds that crime rates are higher in communities characterized by population instability, economic deprivation, ethnic heterogeneity, and weak institutional presence. Ghana's rapid urbanization the Ghana Statistical Service (2021) projects that over 60% of Ghana's population will be urban by 2030 has produced sprawling informal settlements in which social cohesion is fragile and formal social control mechanisms are absent.
+Anomie theory (Merton, 1938) offers a complementary explanation: when legitimate pathways to culturally valued goals wealth, status, security are blocked, individuals may resort to illegitimate means, including crime. Ghana's economic growth has been accompanied by deepening inequality; the Gini coefficient stood at 0.43 in 2017 (Ghana Statistical Service, 2017), and structural barriers including unequal access to quality education and formal employment fuel the conditions anomie theory predicts.
+2.3.1.3 Physiological and Psychological Factors
+Biosocial criminology integrates biological, neurological, and psychological dimensions into the explanation of criminal behaviour. Farrington et al. (2021) identify low self control, impulsivity, antisocial attitudes, and early conduct disorder as robust cross cultural predictors of criminal involvement. Jennifer (2010) noted hereditary influences on criminal propensity, though contemporary genetics research strongly emphasizes gene environment interactions rather than deterministic outcomes.
+Mental health is a critical but underexplored dimension of crime in Ghana. The Ghana Mental Health Authority (2021) estimates that fewer than 2% of Ghanaians with mental health conditions receive any form of treatment, despite the prevalence of conditions such as depression, psychosis, and substance use disorders. Fazel and Danesh (2002) documented that serious mental illness is significantly overrepresented among prison populations globally a pattern likely mirrored in Ghana's correctional institutions, where psychiatric services are severely limited.
+2.3.2 Specific Factors
+Beyond general societal conditions, specific factors operating at the family and community level constitute direct contributors to criminal behaviour in Ghana.
+2.3.2.1 Family Structure and Dynamics
+The family is universally recognized as the primary institution of socialization. Farrington (2011) confirmed that family risk factors including parental criminality, harsh and inconsistent discipline, poor supervision, low family cohesion, and early separation from parents are among the strongest predictors of juvenile delinquency. In Ghana, extended family structures traditionally provide social safety nets that buffer against these risks; however, Adeyemi (2020) observed that urbanization and economic pressure are eroding these protective mechanisms, particularly in cities where nuclear family units are increasingly isolated.
+Child labour remains a significant concern intersecting with family poverty and crime risk. Ghana's Child Labour Survey (GSS, 2021) estimated that approximately 1.9 million children aged 5–17 are engaged in child labour, with those in hazardous conditions particularly vulnerable to recruitment into criminal networks. The Children's Act 1998 (Act 560) and the Juvenile Justice Act 2003 (Act 653) provide a legislative framework for child protection, but enforcement gaps persist.
+2.3.2.2 Economic Deprivation and Inequality
+Economic hardship is one of the most consistently documented correlates of crime. Van (1955), drawing on Bonger's work, noted that disorganized, economically deprived societies produce higher rates of criminal activity. The World Bank (2021) affirms a strong global correlation between income inequality and violent crime rates. In Ghana, youth unemployment estimated at 12.1% formally but significantly higher in informal sector terms (GSS, 2022) creates a vast pool of economically excluded young people susceptible to criminal recruitment.
+The explosion of 'Sakawa' internet fraud predominantly perpetrated by unemployed or underemployed young men is directly linked to economic exclusion and the glamorization of fast wealth in popular culture. Oduro Frimpong (2014) documented the sociocultural normalization of Sakawa in some Ghanaian communities, where perpetrators are perceived not as criminals but as entrepreneurs navigating a system that has failed them a narrative that complicates law enforcement responses.
+2.3.2.3 Media and Digital Influences
+The influence of media on criminal behaviour has been extensively studied. Exposure to violent and criminally glorifying media content through television, film, and increasingly social media has been linked to desensitization and imitative behaviour, particularly among adolescents (Anderson et al., 2010). In Ghana, the proliferation of smartphones and mobile internet access has introduced new vectors of criminal influence, including online radicalization, cyberbullying, and exposure to extremist content.
+Social media platforms have been instrumentalized in Ghana for organized fraud recruitment, cyberbullying campaigns, and the coordination of criminal activities. The Ghana Cybersecurity Authority (CSA, 2022) identified Facebook, Instagram, and WhatsApp as the primary platforms through which online fraud and harassment are organized, underscoring the need for regulatory frameworks that balance digital freedom with safety.
+2.3.2.4 Regional Variation and Inequality
+Crime rates in Ghana exhibit pronounced regional variation, reflecting differences in economic development, governance quality, demographic composition, and historical legacies. Greater Accra and Ashanti consistently record the highest absolute crime figures, while northern regions  despite lower absolute figures experience disproportionate rates of communal violence and chieftaincyrelated conflict relative to their populations (GPS, 2022). Reiss et al. (1993) and Land et al. (1990) affirmed that age, gender, and socioeconomic status are key predictors of criminal involvement patterns corroborated in Ghanaian empirical studies by Boateng (2018).
+Sampson et al. (1990) documented that males are disproportionately represented among criminal offenders across all studied societies. Ghana's GPS data (2022) confirms this pattern, with males accounting for approximately 82% of all arrested suspects. Urban rural disparities in crime reporting capacity also significantly distort the official crime picture, as rural communities have far less access to formal reporting mechanisms.
+2.3.2.5 Religious and Occult Influences
+Religious beliefs and occult practices intersect with crime in Ghana in distinctive ways. Ritual murders crimes committed with the belief that human body parts confer spiritual power or wealth have been documented across several Ghanaian regions, with rural communities in the Volta, Eastern, and Northern regions particularly affected (Amoah Boateng, 2019). While statistically rare, such crimes generate significant public fear and have challenged law enforcement agencies ill equipped for forensically complex investigations.
+Religious fraud involving self-proclaimed prophets and spiritual leaders who exploit followers financially or sexually has also gained prominence. The Ghana Police Service and the Economic and Organised Crime Office (EOCO) have investigated numerous cases of fraudulent religious leaders, reflecting a broader pattern of faith based exploitation documented across West Africa (Ibrahim, 2021). Legislative calls for the regulation of religious bodies in Ghana have intensified in recent years, though progress remains limited.
+
+2.4 Electronic Crime Reporting Platforms
+The digitization of crime reporting represents a paradigm shift in how citizens, communities, and law enforcement agencies interact with the criminal justice system. E-crime reporting platforms digital interfaces through which individuals can report criminal incidents electronically have been shown to increase reporting rates, improve data accuracy, and reduce the friction associated with traditional police station-based reporting (Lum et al., 2022).
+The United States' Internet Crime Complaint Center (IC3), operated by the FBI, is among the most prominent global examples. Despite evidence that approximately 85% of cybercrime victims in the US do not report incidents (Smitt, 2016), IC3 has enabled federal law enforcement to identify crime patterns, prosecute perpetrators, and issue timely public advisories. The platform also provides users with guided first response steps such as freezing bank accounts, changing passwords, and visiting local field offices empowering victims to mitigate losses before formal investigations begin.
+In the United Kingdom, the Action Fraud platform handles over 400,000 reports annually (Home Office, 2022), while comparable EU platforms are governed by GDPR standards that ensure secure and transparent handling of sensitive crime report data. These international examples demonstrate the transformative potential of well-designed E-crime infrastructure.
+In Ghana, the Ghana Police Service launched a dedicated online crime reporting portal (gps.gov.gh) and a tollfree emergency line (191) to improve reporting accessibility. The Ghana Cybersecurity Authority (CSA) operates a cybercrime reporting channel specifically for digital offences (cyber.gov.gh), while DOVVSU maintains a dedicated SGBV reporting platform. However, these platforms remain siloed, addressing only specific crime categories rather than offering an integrated, citizen facing interface for all crime types (Asante & Gyamfi, 2020).
+Across Africa, Kenya's Directorate of Criminal Investigations (DCI) launched a comprehensive online crime reporting portal in 2020, and South Africa's SAPS operates mobile reporting applications in urban centres. These regional examples demonstrate that the infrastructure for digital crime reporting is achievable within African institutional contexts, and Ghana's relatively advanced digital infrastructure with mobile internet penetration exceeding 50% (Ghana Statistical Service, 2022) provides a favourable foundation for expanded E-crime reporting.
+
+2.5 Limitations of Existing E-Crime Reporting Platforms in Ghana
+Despite progress in digital crime reporting globally and regionally, Ghana's e-crime infrastructure remains fragmented and inadequate. Three systemic limitations characterize the current landscape.
+First, isolation: existing platforms address only specific crime types cybercrime (CSA portal), gender based violence (DOVVSU), and financial crime (EOCO) creating information silos that prevent holistic analysis of crime patterns. This fragmentation impedes strategic policing, as patterns linking different crime types across regions cannot be identified from any single platform (Asante & Gyamfi, 2020).
+Second, absence of feedback: victims and reporters receive no acknowledgment or update on the status of their reports. Boateng (2012) identified this as a primary driver of nonreporting in Ghana, where citizens who have previously reported crimes without receiving any response are deeply reluctant to engage formal channels again. This feedback vacuum fundamentally undermines the legitimacy and utility of existing platforms.
+Third, accessibility barriers: Ghana's digital divide with rural communities, elderly citizens, and low literacy populations significantly underserved by existing digital platforms means that current e-crime reporting mechanisms exclude precisely the populations most vulnerable to crime (Ghana Statistical Service, 2022). Lum et al. (2022) emphasize that inclusive design including multilingual interfaces, voice enabled reporting, and USSD based access for non smartphone users is essential for digital crime reporting to achieve equitable impact.
+The proposed e-crime reporting system at the center of this study is designed to address these gaps providing an open access, comprehensive, and feedback driven digital platform for reporting all categories of crime across Ghana, accessible to citizens regardless of their technological sophistication or geographic location.
+2.6 The Criminal Justice System in Ghana
+Ghana's criminal justice system is structured around five sequential processes: arrest, prosecution, adjudication, sentencing, and correction. Tosin (2003), adapted to the Ghanaian context, traces the pathway from initial crime reporting and suspect arrest through interrogation and investigation, formal charge and court examination, and the imposition of penalties ranging from community service and fines to custodial sentences in accordance with the Constitution of the Republic of Ghana and applicable statutes.
+The Ghana Police Service, established under the Police Service Act 1970 (Act 350), is the primary law enforcement body responsible for crime detection, investigation, and arrest. The GPS has undergone significant institutional reform in recent years, including the introduction of Community Policing Units and the establishment of specialized units for cybercrime, SGBV, and organized crime. However, the Service continues to face critical resource constraints: a police to citizen ratio of approximately 1:850 well below the UN recommended ratio of 1:450 severely limits effective coverage (GPS, 2022).
+The Attorney General's Department and the Office of the Director of Public Prosecutions bear responsibility for prosecution. Asante and Gyamfi (2020) documented significant case attrition between arrest and prosecution, with weak evidence management, inadequate prosecutorial capacity, and poor police prosecutor coordination identified as primary contributors. The resulting low conviction rates further erode public confidence in the justice system.
+Ghana's correctional system administered by the Ghana Prisons Service faces acute overcrowding. As of 2022, Ghana's prisons held approximately 16,000 inmates against an official capacity of 9,875 an occupancy rate of 162% (Ghana Prisons Service, 2022). The overrepresentation of awaiting trial prisoners (comprising approximately 33% of the prison population) reflects systemic failures in pretrial detention management and access to legal aid.
+Reform efforts are underway. The Criminal Offences (Amendment) Act 2022 and ongoing judicial reforms supported by the Ghana Legal Aid Scheme aim to improve access to justice, reduce case backlogs, and strengthen victim support services. International frameworks including the UN Standard Minimum Rules for the Treatment of Prisoners (Nelson Mandela Rules) and the African Charter on Human and Peoples' Rights provide normative standards a gait which Ghana's system can be benchmarked and reformed. The digitization of crime reporting, as proposed in this study, represents one component of this broader modernization agenda.
+summary of Literature Review
+This chapter has provided a comprehensive and current review of the literature underpinning this study, with specific focus on the Ghanaian context. It began with a conceptual examination of crime its definitions, evolution, and contested universality situated within Ghana's legal and cultural framework. It then classified the predominant forms of crime in Ghana: normal crimes (including armed robbery, cybercrime, and sexual violence), political economic crimes (including corruption and electoral fraud), and riotous crimes (including chieftaincy disputes, galamsey related violence, and communal conflict).
+The review examined the multilayered factors contributing to criminal behaviour, spanning geographical, sociological, psychological, familial, economic, media related, and religious dimensions all grounded in evidence from Ghana specific empirical studies and current international criminological scholarship. The chapter then evaluated the landscape of electronic crime reporting platforms globally and within Ghana, identifying best practices from the US (IC3), UK (Action Fraud), and emerging African initiatives, before critically analysing the significant limitations of Ghana's existing e-crime infrastructure including fragmentation, absence of citizen feedback, and digital exclusion.
+Finally, the chapter situated the study within Ghana's criminal justice system, highlighting ongoing reform efforts and the transformative potential of digital innovation. Collectively, the reviewed literature establishes both the urgent need for and the conceptual foundations of an integrated, accessible, and feedback driven e-crime reporting platform for Ghana the central contribution of this research.
+
+
+
+
+
+
+
+CHAPTER THREE
+METHODOLOGY AND SYSTEM ANALYSIS AND DESIGN
+
+3.0 INTRODUCTION
+This chapter presents the methodology adopted for the design and implementation of the crime reporting web application and describes, in detail, the analysis and design of the proposed system. It covers the research methodology and system development approach adopted for the study, the methods used to gather data on the current crime reporting process, an analysis of the existing (manual) system and its shortcomings, the analysis of the proposed system, the functional and non-functional requirements of the new system, and the architectural, data flow, entity relationship and database designs on which the implementation in Chapter Four is based.
+The chapter is organised into the following sections: research methodology, methods of data collection, analysis of the existing system, analysis of the proposed system, system requirements, and system design, which includes the system architecture, use case analysis, data flow diagrams, entity relationship diagram, database design, and input/output design.
+3.1 RESEARCH METHODOLOGY / SYSTEM DEVELOPMENT METHODOLOGY
+This study adopts a combination of descriptive research design and the Object-Oriented Analysis and Design (OOAD) methodology, implemented through an iterative and incremental (Agile-based) software development approach. The descriptive design was used to gather and describe the current state of crime reporting practices within the Ghana Police Service, while OOAD was used to model the proposed system in terms of the real-world objects it represents, such as reports, users, police officers, stations and investigations.
+An iterative development approach, rather than a strict linear (Waterfall) model, was chosen because the requirements of a citizen-facing government system are best refined through repeated cycles of requirement gathering, design, prototyping and stakeholder feedback. Each iteration of the development produced a working increment of the system (for example, the report submission module, followed by the case management module, followed by the analytics module), which was reviewed before proceeding to the next increment. This reduced the risk of building a system that did not meet the needs of the public or the Police, and allowed lessons learnt from one module to improve the design of subsequent modules.
+The methodology followed five broad, overlapping phases:
+Requirement gathering and analysis – identifying what the system must do, drawn from the literature reviewed in Chapter Two and from data collected as described in Section 3.2.
+System design – translating requirements into an architecture, database schema, and interface design, as presented in Section 3.6.
+Implementation – coding the modules using the tools and languages justified in Section 3.7 (presented in full in Chapter Four).
+Testing – verifying that each module functions correctly, both in isolation (unit testing) and as an integrated whole (system testing), presented in Chapter Four.
+Deployment and review – releasing the system and collecting feedback for further refinement.
+3.2 METHODS OF DATA COLLECTION
+In order to properly understand the existing crime reporting process and to elicit accurate requirements for the proposed system, both primary and secondary sources of data were used.
+3.2.1 Primary Data Sources
+Interviews: Informal interviews were conducted with police personnel and administrative staff at selected police stations to understand how complaints, dispatch reports, crime event reports and arrest reports are currently received, recorded and processed.
+Questionnaires: Structured questionnaires were administered to a sample of members of the public to determine their willingness to report crime online, their concerns about anonymity and safety, and the features they would find most useful in a crime reporting application.
+Observation: Direct observation of the manual reporting process at a police station's front desk was carried out to document the flow of a complaint from the point of receipt to the point of filing.
+3.2.2 Secondary Data Sources
+Review of existing literature, journal articles, and reports on crime and e-crime reporting platforms, as presented in Chapter Two.
+Review of official Ghana Police Service (GPS), Ghana Cybersecurity Authority (CSA) and DOVVSU publications, annual reports and crime statistics.
+Review of existing complaint forms, dispatch report forms, crime event report forms and arrest report forms currently in use.
+3.3 ANALYSIS OF THE EXISTING SYSTEM
+The current crime reporting process used by the Ghana Police Service is largely manual and paper-based. A member of the public who wishes to report a crime must either visit a police station in person, place a telephone call to the station or to the toll-free emergency line (191), or in some cases send a message to an officer they know personally. At the station, a duty officer manually records the details of the complaint into a diary or complaint/dispatch form. If the report warrants further action, a crime event report form is completed, and the case file is physically routed to an investigator, who subsequently completes a follow-up investigation report and, where an arrest is made, an arrest report.
+All of these records are kept in physical case files or station-level registers. There is generally no centralised, searchable digital record linking reports from different stations, which makes it difficult to identify patterns of criminal activity that span more than one locality.
+3.3.1 Problems of the Existing System
+Analysis of the existing manual process revealed the following problems:
+Limited accessibility: reporting is largely restricted to telephone calls or physical visits to a police station, both of which can be inconvenient, time-consuming, or simply impossible for a reporter who is in a location without immediate access to a station.
+Lack of anonymity: reporters who wish to remain anonymous, particularly in sensitive cases such as domestic violence, defilement or organised crime, find it difficult to do so through telephone or face-to-face channels.
+No feedback mechanism: reporters are rarely informed of the status or outcome of a report they have filed, which, as noted in Chapter Two, is one of the strongest documented causes of under-reporting in Ghana.
+Fragmentation of records: complaint, crime event, investigation and arrest records are kept on separate paper forms and station-specific registers, making it difficult to cross-reference a single case across its full lifecycle or across stations.
+Delayed routing of information: physical case files must be transported between desks, officers and, in some cases, stations, which slows down investigation and follow-up.
+Risk of loss or damage: paper-based records are vulnerable to loss, fire, water damage and unauthorised access, and are difficult to back up.
+Absence of analytics: because records are not digitised, it is difficult for the Police to generate reliable, timely statistics on crime hot-spots, trends or the effectiveness of interventions.
+3.4 ANALYSIS OF THE PROPOSED SYSTEM
+The proposed system is a web-based crime reporting application that digitises and centralises the four reporting forms identified in the existing process – the complaint/dispatch reporting form, the crime event report form, the follow-up investigation report form, and the arrest report form – within a single, secure, database-backed platform accessible to the public, the Police, and system administrators.
+In line with the functional decomposition introduced in the abstract of this study, the system is organised into three functional modules:
+Data Capture Module: allows members of the public to register, log in (or report anonymously), and submit crime reports – including a description of the incident, location, date/time, crime category, and supporting evidence such as photographs or documents.
+Report Management and Control Module: allows police officers and administrators to review incoming reports, assign them to an investigating officer, update the investigation status, record findings, and, where appropriate, generate a follow-up investigation report or an arrest report.
+Data Utilization Module: allows administrators and authorised police personnel to generate statistics, dashboards and reports on crime trends by category, region and time period, supporting the strategic and tactical decision-making discussed in Chapter Two.
+3.4.1 Advantages of the Proposed System
+Round-the-clock accessibility from any internet-enabled device, removing the need to visit a station or place a call during office hours.
+An anonymous reporting option that protects the identity of reporters who fear reprisal.
+Automated status notifications that keep reporters informed as their case progresses, directly addressing the feedback gap identified in Chapter Two.
+A single, centralised database that links complaint, crime event, investigation and arrest records for the same case, supporting faster and more accurate investigation.
+Role-based access control that restricts sensitive case information to authorised police personnel only.
+Built-in analytics and reporting that give the Police reliable, near real-time visibility into crime patterns across regions.
+Reduced risk of record loss, since data is stored in a managed database rather than paper files.
+3.5 SYSTEM REQUIREMENTS
+Requirements for the proposed system were derived from the data collected as described in Section 3.2 and from the gaps identified in the literature reviewed in Chapter Two. They are grouped into functional and non-functional requirements below.
+3.5.1 Functional Requirements
+The system shall:
+Allow a member of the public to register and create a personal account, or to submit a report anonymously without registering.
+Allow a registered or anonymous user to submit a crime report specifying the crime type, description, date/time and location of the incident, and, optionally, attach supporting evidence (images or documents).
+Allow a registered user to view the status and history of reports they have submitted.
+Allow a police officer to log in to a dashboard showing newly submitted reports assigned to their station or unit.
+Allow an authorised officer or administrator to assign a report to an investigating officer and update its status (e.g. Received, Under Investigation, Resolved, Closed).
+Allow an investigating officer to record follow-up investigation findings and, where an arrest is made, complete an arrest report linked to the original crime report.
+Send automated status notifications (in-app, and where possible email or SMS) to a reporter when the status of their report changes.
+Allow an administrator to manage user accounts, police stations and officer records.
+Allow an administrator or authorised officer to search and filter reports by crime type, region, status and date range.
+Generate summary statistics and visual reports (e.g. crime counts by category, region and period) for the data utilization module.
+Enforce role-based access control such that the public, police officers and administrators each see only the functions and data appropriate to their role.
+3.5.2 Non-Functional Requirements
+Security: all user passwords shall be stored using a one-way hashing algorithm, all communication between the client and server shall be encrypted (HTTPS), and access to case data shall be restricted according to user role.
+Usability: the interface shall be simple and intuitive enough for a citizen with limited computer literacy to submit a report without assistance.
+Availability: the system shall be available at all times other than scheduled maintenance windows, since crimes can be reported at any hour.
+Performance: common operations, such as submitting a report or loading a dashboard, shall complete within a few seconds under normal load.
+Scalability: the system's architecture shall allow additional police stations, users and report volume to be added without a redesign of the underlying system.
+Maintainability: the system shall be built using a modular architecture (Section 3.6.1) so that individual modules can be updated or extended independently.
+Data privacy: personal and case data shall be handled in a manner consistent with data protection principles, and anonymous reports shall not store identifying information about the reporter.
+3.5.3 Hardware Requirements
+Component
+Minimum Specification
+Server processor
+Dual-core, 2.0 GHz or higher
+Server memory (RAM)
+4 GB or higher
+Server storage
+100 GB or higher (SSD recommended)
+Client device
+Any desktop, laptop, tablet or smartphone with a modern web browser
+Network connection
+Stable broadband or mobile internet connection
+
+3.5.4 Software Requirements
+Component
+Specification
+Operating System (server)
+Windows Server / Linux (Ubuntu)
+Web server
+Apache HTTP Server (via XAMPP/WAMP in development)
+Server-side language
+PHP
+Database Management System
+MySQL
+Client-side technologies
+HTML5, CSS3, JavaScript, Bootstrap
+Web browser (client)
+Google Chrome, Mozilla Firefox, Microsoft Edge or any modern browser
+Development tools
+Visual Studio Code, phpMyAdmin, XAMPP
+
+3.6 SYSTEM DESIGN
+This section presents the design of the proposed system, translating the requirements identified in Section 3.5 into a system architecture, a use case model, data flow diagrams, an entity relationship diagram, a database design, and an input/output design.
+3.6.1 System Architecture
+The system adopts a three-tier client–server architecture consisting of a presentation layer, an application (business logic) layer, and a data layer, as illustrated in Figure 3.1. This separation of concerns allows each layer to be developed, tested and scaled independently, and reflects the three functional modules described in Section 3.4: the Data Capture Module and Report Management and Control Module are implemented primarily within the application layer, while the Data Utilization Module draws on data held in the data layer to produce statistics and reports.
+
+Figure 3.1: Three-Tier Architecture of the Proposed Crime Reporting System
+In the presentation layer, the public, police officers and administrators interact with the system through a responsive web interface rendered in the browser. Requests are passed to the application layer, where an authentication and authorisation module verifies the identity and role of the user before routing the request to the appropriate module – the Data Capture Module for report submission, the Report Management and Control Module for case handling, or the Data Utilization Module for analytics. All persistent data – reports, users, stations, officers, investigations and attachments – is stored in the MySQL database that constitutes the data layer.
+3.6.2 Use Case Analysis
+Three principal actors interact with the system: the Public/Reporter, the Police Officer (including investigators and station administrators), and the System Administrator. Table 3.1 summarises the principal use cases associated with each actor.
+Actor
+Use Cases
+Public / Reporter
+Register account; Log in; Submit crime report (identified or anonymous); Attach evidence; Track report status; Receive notifications
+Police Officer
+Log in; View assigned reports; Update investigation status; Record findings; Complete arrest report; Search/filter reports
+System Administrator
+Manage user accounts; Manage police stations and officers; Assign roles/permissions; Generate crime statistics and reports; Monitor system activity
+
+3.6.3 Data Flow Diagram
+Figure 3.2 presents a Level-1 Data Flow Diagram (DFD) showing how a crime report moves through the system, from initial submission by a citizen, through validation and storage, to assignment and investigation by the Police, and finally to feedback for the reporter and analytics for the administrator.
+
+Figure 3.2: Level-1 Data Flow Diagram of the Crime Reporting Process
+As shown in the diagram, a report submitted by a citizen (Process 1.0) is validated and stored (Process 2.0) in the Crime Report Database, after which it becomes available to the Report Management and Control Module (Process 3.0) for assignment to, and update by, a police officer. Any change to the status of a report triggers the feedback and alert process (Process 4.0), which notifies the reporter, closing the feedback loop that was identified in Chapter Two as absent from existing platforms. Independently, the Data Utilization Module (Process 5.0) draws on the Crime Report and Investigation Databases to generate the statistics and analytics requested by administrators.
+3.6.4 Entity Relationship Diagram and Database Design
+Figure 3.3 presents the Entity Relationship Diagram (ERD) for the proposed system's database. The database is normalised to the third normal form to minimise redundancy while preserving the relationships necessary to trace a report from submission through investigation to resolution.
+
+Figure 3.3: Entity Relationship Diagram of the Proposed Database
+A single user record may submit many crime reports (one-to-many). A crime report may have several attachments and, once accepted for investigation, is linked to one or more investigation records, each associated with the investigating officer responsible. Each police officer belongs to a single police station, and each station may have many officers. Status changes to a report generate corresponding entries in the feedback log, which are subsequently delivered to the reporter.
+The principal tables derived from the ERD are described in Tables 3.2 to 3.6 below.
+Field
+Type
+Description
+user_id (PK)
+INT, Auto Increment
+Unique identifier for a user
+full_name
+VARCHAR(100)
+User's full name
+email
+VARCHAR(100)
+Unique email address, used for login
+phone
+VARCHAR(20)
+Contact phone number
+password_hash
+VARCHAR(255)
+Hashed user password
+role
+ENUM
+'public', 'officer' or 'admin'
+created_at
+DATETIME
+Date and time the account was created
+
+Table 3.2: USER Table
+Field
+Type
+Description
+report_id (PK)
+INT, Auto Increment
+Unique identifier for a report
+user_id (FK)
+INT, Nullable
+Reporter (null if submitted anonymously)
+crime_type
+VARCHAR(50)
+Category of the reported crime
+description
+TEXT
+Narrative description of the incident
+location
+VARCHAR(150)
+Location/region of the incident
+incident_date
+DATETIME
+Date and time the incident occurred
+status
+ENUM
+'Received', 'Under Investigation', 'Resolved', 'Closed'
+is_anonymous
+BOOLEAN
+Whether the report was submitted anonymously
+created_at
+DATETIME
+Date and time the report was submitted
+
+Table 3.3: CRIME_REPORT Table
+Field
+Type
+Description
+station_id (PK)
+INT, Auto Increment
+Unique identifier for a police station
+station_name
+VARCHAR(100)
+Name of the police station
+region
+VARCHAR(50)
+Region in which the station is located
+district
+VARCHAR(50)
+District in which the station is located
+contact_number
+VARCHAR(20)
+Station telephone contact
+
+Table 3.4: POLICE_STATION Table
+Field
+Type
+Description
+officer_id (PK)
+INT, Auto Increment
+Unique identifier for an officer
+user_id (FK)
+INT
+Link to the officer's user account
+badge_number
+VARCHAR(20)
+Officer's badge/service number
+station_id (FK)
+INT
+Station to which the officer is attached
+rank
+VARCHAR(50)
+Officer's rank
+
+Table 3.5: POLICE_OFFICER Table
+Field
+Type
+Description
+investigation_id (PK)
+INT, Auto Increment
+Unique identifier for an investigation record
+report_id (FK)
+INT
+Crime report being investigated
+officer_id (FK)
+INT
+Officer assigned to the investigation
+findings
+TEXT
+Investigation findings / notes
+status
+ENUM
+'Ongoing', 'Arrest Made', 'Completed'
+updated_at
+DATETIME
+Date and time of the last update
+
+Table 3.6: INVESTIGATION Table
+3.6.5 Input Design
+The primary input to the system is the crime report submission form used by the Data Capture Module. The form was designed to be as short as possible while still capturing the fields identified in Section 1.2 for property crime (type and description of the article, its value, type of loss, type of victim, and location of the crime) as well as fields applicable to crimes generally. Table 3.7 summarises the principal input fields.
+Field
+Input Control
+Validation
+Crime type
+Drop-down list
+Required; must match a predefined category
+Description
+Multi-line text area
+Required; minimum length enforced
+Location
+Text field / map picker
+Required
+Date/time of incident
+Date-time picker
+Required; cannot be a future date
+Evidence attachment
+File upload
+Optional; restricted file types and size
+Report anonymously
+Checkbox/toggle
+Optional; when checked, no user_id is stored
+Contact details
+Text field
+Required only if not reporting anonymously
+
+Table 3.7: Crime Report Submission Form – Input Design
+The follow-up investigation report and arrest report forms used by police officers follow the same design principle: pre-populated fields drawn from the original crime report (to avoid re-entry of data already captured), combined with structured fields specific to the investigation or arrest, such as suspect details, findings, and case disposition.
+3.6.6 Output Design
+The system produces three broad categories of output. First, status notifications delivered to the reporter, informing them when their report has been received, assigned, or resolved, directly addressing the feedback gap identified in Section 2.5. Second, case-management screens for police officers, presenting assigned reports, investigation history and case status in a sortable, filterable list and detail view. Third, analytical output for administrators, consisting of summary tables and charts of crime counts by category, region and period, exportable for onward use in strategic and tactical decision-making, as discussed in Section 1.4.
+3.7 JUSTIFICATION OF PROGRAMMING LANGUAGE AND TOOLS
+PHP was selected as the server-side scripting language because it is open source, widely supported, integrates seamlessly with MySQL, and is well suited to the rapid, iterative development approach described in Section 3.1. MySQL was selected as the database management system because it is a mature, reliable, open-source relational database capable of enforcing the referential integrity required by the entity relationships described in Section 3.6.4, and because it is well supported by low-cost or free hosting environments appropriate for a public sector application. HTML5, CSS3, JavaScript and the Bootstrap framework were used on the client side to produce a responsive interface that functions correctly across desktop and mobile devices, in keeping with the accessibility requirement identified in Section 2.5 and the non-functional usability requirement in Section 3.5.2.
+SUMMARY OF CHAPTER THREE
+This chapter described the methodology adopted for this study – a descriptive research design combined with an Object-Oriented, iterative system development approach – and the primary and secondary methods used to collect data on the existing crime reporting process. It analysed the existing manual system and identified its key shortcomings: limited accessibility, lack of anonymity, absence of feedback, fragmentation of records, delayed routing of information, risk of record loss, and the absence of analytics. It then presented the proposed web-based crime reporting system, organised around the Data Capture, Report Management and Control, and Data Utilization modules, and set out its functional and non-functional requirements together with the hardware and software needed to support it.
+Finally, the chapter presented the design of the proposed system: a three-tier system architecture, a use case model identifying the Public, Police Officer and Administrator actors, a data flow diagram tracing a report from submission to feedback and analytics, an entity relationship diagram and accompanying database table designs, and the input and output design of the principal forms and screens. Together, these designs form the blueprint for the implementation described in Chapter Four.
+

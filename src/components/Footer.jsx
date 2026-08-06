@@ -68,7 +68,6 @@ export default function Footer() {
             <li><Link to="/track" className="hover:text-gold-400">Track a Report</Link></li>
             <li><a href="#" className="hover:text-gold-400">Privacy Policy</a></li>
             <li><a href="#" className="hover:text-gold-400">Terms & Conditions</a></li>
-            <li><Link to="/login" className="hover:text-gold-400">Officer Login</Link></li>
           </ul>
         </div>
       </div>

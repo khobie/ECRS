@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   AreaChart,
@@ -17,13 +18,7 @@ import {
 import { ArrowRight, MapPin } from "lucide-react";
 import StatCard from "../components/StatCard";
 import ChartCard from "../components/ChartCard";
-import {
-  dashboardStats,
-  crimeTrend,
-  reportsByRegion,
-  categoryDistribution,
-  reports,
-} from "../data/mock";
+import { api } from "../lib/api";
 import { formatDate, statusStyles, priorityStyles } from "../lib/utils";
 
 const tooltipStyle = {
@@ -34,24 +29,39 @@ const tooltipStyle = {
 };
 
 export default function Dashboard() {
-  const recent = reports.slice(0, 6);
+  const [data, setData] = useState(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    api.getDashboard()
+      .then(setData)
+      .catch((err) => setError(err.message));
+  }, []);
+
+  if (error) {
+    return (
+      <div className="card p-8 text-center text-sm text-red-500">
+        {error} — make sure the Laravel API is running.
+      </div>
+    );
+  }
+
+  if (!data) {
+    return <div className="card p-8 text-center text-sm text-slate-400">Loading dashboard…</div>;
+  }
+
+  const { stats, crime_trend: crimeTrend, reports_by_zone: reportsByRegion, category_distribution: categoryDistribution, recent_reports: recent } = data;
 
   return (
     <div className="space-y-6">
-      {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        {dashboardStats.map((s) => (
+        {stats.map((s) => (
           <StatCard key={s.label} {...s} />
         ))}
       </div>
 
-      {/* Charts row 1 */}
       <div className="grid gap-6 lg:grid-cols-3">
-        <ChartCard
-          title="Crime Trend"
-          subtitle="Reports vs. resolved over the year"
-          className="lg:col-span-2"
-        >
+        <ChartCard title="Crime Trend" subtitle="Reports vs. resolved over the year" className="lg:col-span-2">
           <ResponsiveContainer width="100%" height={280}>
             <AreaChart data={crimeTrend} margin={{ left: -20, right: 10 }}>
               <defs>
@@ -78,14 +88,7 @@ export default function Dashboard() {
         <ChartCard title="Crime Categories" subtitle="Distribution by type">
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
-              <Pie
-                data={categoryDistribution}
-                dataKey="value"
-                nameKey="name"
-                innerRadius={55}
-                outerRadius={90}
-                paddingAngle={2}
-              >
+              <Pie data={categoryDistribution} dataKey="value" nameKey="name" innerRadius={55} outerRadius={90} paddingAngle={2}>
                 {categoryDistribution.map((e) => (
                   <Cell key={e.name} fill={e.color} />
                 ))}
@@ -104,7 +107,6 @@ export default function Dashboard() {
         </ChartCard>
       </div>
 
-      {/* Charts row 2 */}
       <div className="grid gap-6 lg:grid-cols-2">
         <ChartCard title="Reports by Zone" subtitle="Top zones in Koforidua this year">
           <ResponsiveContainer width="100%" height={280}>
@@ -131,11 +133,10 @@ export default function Dashboard() {
         </ChartCard>
       </div>
 
-      {/* Recent reports */}
       <div className="card overflow-hidden">
         <div className="flex items-center justify-between border-b border-slate-100 p-5">
           <h3 className="font-display text-base font-bold text-slate-900">Recent Reports</h3>
-          <Link to="/dashboard/reports" className="flex items-center gap-1 text-sm font-semibold text-police-700 hover:text-police-900">
+          <Link to="/officer/reports" className="flex items-center gap-1 text-sm font-semibold text-police-700 hover:text-police-900">
             View all <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -152,20 +153,26 @@ export default function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {recent.map((r) => (
-                <tr key={r.id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50">
-                  <td className="px-5 py-3 font-semibold text-police-700">{r.id}</td>
-                  <td className="px-5 py-3 text-slate-700">{r.crimeType}</td>
-                  <td className="px-5 py-3 text-slate-500">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="h-3.5 w-3.5 text-slate-400" /> {r.location}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3 text-slate-500">{formatDate(r.dateReported)}</td>
-                  <td className="px-5 py-3"><span className={`badge ${priorityStyles[r.priority]}`}>{r.priority}</span></td>
-                  <td className="px-5 py-3"><span className={`badge ${statusStyles[r.status]}`}>{r.status}</span></td>
+              {recent.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-5 py-8 text-center text-slate-400">No reports yet.</td>
                 </tr>
-              ))}
+              ) : (
+                recent.map((r) => (
+                  <tr key={r.id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50">
+                    <td className="px-5 py-3 font-semibold text-police-700">{r.id}</td>
+                    <td className="px-5 py-3 text-slate-700">{r.crimeType}</td>
+                    <td className="px-5 py-3 text-slate-500">
+                      <span className="flex items-center gap-1">
+                        <MapPin className="h-3.5 w-3.5 text-slate-400" /> {r.location}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3 text-slate-500">{formatDate(r.dateReported)}</td>
+                    <td className="px-5 py-3"><span className={`badge ${priorityStyles[r.priority]}`}>{r.priority}</span></td>
+                    <td className="px-5 py-3"><span className={`badge ${statusStyles[r.status]}`}>{r.status}</span></td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

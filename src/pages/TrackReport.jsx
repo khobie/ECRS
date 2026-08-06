@@ -1,32 +1,49 @@
 import { useState } from "react";
 import { Search, Check, Clock, FileText, MapPin, User, ShieldCheck, Bell } from "lucide-react";
-import { trackTimeline } from "../data/mock";
-import { formatDateTime, statusStyles } from "../lib/utils";
+import { api } from "../lib/api";
+import { formatDateTime, formatStatus, statusStyles } from "../lib/utils";
+
+const eventLabels = {
+  submitted: "Submitted",
+  assigned: "Assigned",
+  reassigned: "Reassigned",
+  status_changed: "Status Updated",
+  priority_changed: "Priority Updated",
+  note_added: "Note Added",
+  evidence_uploaded: "Evidence Uploaded",
+  officer_message: "Officer Message",
+  resolved: "Resolved",
+  closed: "Closed",
+};
 
 export default function TrackReport() {
   const [caseId, setCaseId] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const search = (e) => {
+  const search = async (e) => {
     e.preventDefault();
     if (!caseId.trim()) {
       setError("Please enter a Case ID.");
       setResult(null);
       return;
     }
+    setLoading(true);
     setError("");
-    setResult({
-      id: caseId.toUpperCase(),
-      type: "Armed Robbery",
-      location: "Jackson's Park, Koforidua",
-      officer: "Insp. Kwame Mensah",
-      filed: "2026-06-02T09:14:00",
-      current: "Under Investigation",
-    });
+    try {
+      const res = await api.trackReport(caseId);
+      setResult(res.data);
+    } catch (err) {
+      setResult(null);
+      setError(err.message || "Case not found. Check the ID and try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const currentIndex = result ? trackTimeline.findIndex((t) => t.status === result.current) : -1;
+  const statusLabel = result ? formatStatus(result.status) : "";
+  const timeline = result?.timeline || [];
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -52,8 +69,8 @@ export default function TrackReport() {
               onChange={(e) => setCaseId(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn-primary sm:w-40">
-            <Search className="h-4 w-4" /> Track
+          <button type="submit" disabled={loading} className="btn-primary sm:w-40 disabled:opacity-60">
+            <Search className="h-4 w-4" /> {loading ? "Searching…" : "Track"}
           </button>
         </div>
         {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
@@ -62,54 +79,50 @@ export default function TrackReport() {
 
       {result && (
         <div className="mt-8 animate-fade-in space-y-6">
-          {/* Summary */}
           <div className="card overflow-hidden">
             <div className="flex flex-wrap items-center justify-between gap-3 bg-police-900 px-6 py-5 text-white">
               <div>
                 <p className="text-xs text-slate-300">Case ID</p>
-                <p className="font-display text-xl font-extrabold">{result.id}</p>
+                <p className="font-display text-xl font-extrabold">{result.case_id}</p>
               </div>
-              <span className={`badge ${statusStyles[result.current]}`}>{result.current}</span>
+              <span className={`badge ${statusStyles[statusLabel] || "bg-slate-100 text-slate-700"}`}>
+                {statusLabel}
+              </span>
             </div>
             <div className="grid gap-4 p-6 sm:grid-cols-3">
-              <Info icon={FileText} label="Crime Type" value={result.type} />
-              <Info icon={MapPin} label="Location" value={result.location} />
+              <Info icon={FileText} label="Crime Type" value={result.crime_type} />
+              <Info icon={MapPin} label="Location" value={`${result.location}, ${result.zone}`} />
               <Info icon={User} label="Assigned Officer" value={result.officer} />
             </div>
           </div>
 
-          {/* Timeline */}
           <div className="card p-6">
             <div className="mb-5 flex items-center justify-between">
               <h2 className="font-display text-lg font-bold text-police-900">Status Timeline</h2>
-              <span className="text-xs text-slate-400">Filed {formatDateTime(result.filed)}</span>
+              <span className="text-xs text-slate-400">Filed {formatDateTime(result.filed_at)}</span>
             </div>
 
             <ol className="relative">
-              {trackTimeline.map((t, i) => {
-                const done = i < currentIndex;
-                const active = i === currentIndex;
+              {timeline.map((t, i) => {
+                const isLast = i === timeline.length - 1;
+                const label = eventLabels[t.event] || formatStatus(t.event);
                 return (
-                  <li key={t.status} className="relative flex gap-4 pb-7 last:pb-0">
-                    {i < trackTimeline.length - 1 && (
-                      <span className={`absolute left-[18px] top-9 h-[calc(100%-1.5rem)] w-0.5 ${done ? "bg-emerald-500" : "bg-slate-200"}`} />
+                  <li key={`${t.event}-${t.date}-${i}`} className="relative flex gap-4 pb-7 last:pb-0">
+                    {!isLast && (
+                      <span className="absolute left-[18px] top-9 h-[calc(100%-1.5rem)] w-0.5 bg-emerald-500" />
                     )}
                     <div
                       className={`relative z-10 grid h-9 w-9 shrink-0 place-items-center rounded-full ${
-                        done
-                          ? "bg-emerald-500 text-white"
-                          : active
-                          ? "bg-police-700 text-white"
-                          : "bg-slate-200 text-slate-400"
+                        isLast ? "bg-police-700 text-white" : "bg-emerald-500 text-white"
                       }`}
                     >
-                      {done ? <Check className="h-4 w-4" /> : active ? <Clock className="h-4 w-4" /> : i + 1}
-                      {active && <span className="absolute inset-0 rounded-full bg-police-700 animate-pulse-ring" />}
+                      {isLast ? <Clock className="h-4 w-4" /> : <Check className="h-4 w-4" />}
+                      {isLast && <span className="absolute inset-0 rounded-full bg-police-700 animate-pulse-ring" />}
                     </div>
                     <div className="pt-1">
                       <div className="flex items-center gap-2">
-                        <p className={`font-semibold ${done || active ? "text-slate-800" : "text-slate-400"}`}>{t.status}</p>
-                        {active && <span className="badge bg-police-50 text-police-700">Current</span>}
+                        <p className="font-semibold text-slate-800">{label}</p>
+                        {isLast && <span className="badge bg-police-50 text-police-700">Latest</span>}
                       </div>
                       <p className="mt-0.5 text-sm text-slate-500">{t.note}</p>
                       {t.date && <p className="mt-0.5 text-xs text-slate-400">{formatDateTime(t.date)}</p>}

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   ChevronLeft,
   FileText,
@@ -19,57 +19,171 @@ import {
   Download,
   ShieldAlert,
 } from "lucide-react";
-import { investigationNotes, officers, trackTimeline } from "../data/mock";
-import { formatDateTime, statusStyles } from "../lib/utils";
+import { api } from "../lib/api";
+import { formatDateTime, formatStatus, formatPriority, statusStyles, priorityStyles } from "../lib/utils";
 
 const tabs = ["Incident", "Notes", "Officer", "Timeline"];
 
-const evidence = [
-  { name: "scene_photo_01.jpg", type: "image", size: "2.4 MB", icon: Image },
-  { name: "scene_photo_02.jpg", type: "image", size: "1.9 MB", icon: Image },
-  { name: "cctv_clip.mp4", type: "video", size: "18.2 MB", icon: Video },
-  { name: "witness_statement.pdf", type: "doc", size: "320 KB", icon: File },
-];
+const eventLabels = {
+  submitted: "Submitted",
+  assigned: "Assigned",
+  reassigned: "Reassigned",
+  status_changed: "Status Updated",
+  resolved: "Resolved",
+  closed: "Closed",
+};
+
+const evidenceIcon = {
+  image: Image,
+  video: Video,
+  audio: File,
+  document: File,
+};
 
 export default function Investigation() {
+  const [params] = useSearchParams();
+  const caseId = params.get("case") || "KFD-2026-489201";
   const [tab, setTab] = useState("Incident");
-  const [notes, setNotes] = useState(investigationNotes);
+  const [caseData, setCaseData] = useState(null);
+  const [officers, setOfficers] = useState([]);
+  const [notes, setNotes] = useState([]);
+  const [assigned, setAssigned] = useState("");
+  const [assignedId, setAssignedId] = useState(null);
   const [draft, setDraft] = useState("");
-  const [assigned, setAssigned] = useState("Insp. Kwame Mensah");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
-  const addNote = () => {
-    if (!draft.trim()) return;
-    setNotes((n) => [
-      ...n,
-      { author: "Insp. K. Mensah", date: new Date().toISOString(), text: draft.trim() },
-    ]);
-    setDraft("");
+  useEffect(() => {
+    setLoading(true);
+    setError("");
+    Promise.all([api.getReport(caseId), api.getOfficers()])
+      .then(([reportRes, officersRes]) => {
+        setCaseData(reportRes.data);
+        setNotes(reportRes.data.notes || []);
+        setAssigned(reportRes.data.officer || "Unassigned");
+        setAssignedId(reportRes.data.officer_id ?? null);
+        setOfficers(officersRes.data || []);
+      })
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, [caseId]);
+
+  const reloadCase = () =>
+    api.getReport(caseId).then((res) => {
+      setCaseData(res.data);
+      setNotes(res.data.notes || []);
+      setAssigned(res.data.officer || "Unassigned");
+      setAssignedId(res.data.officer_id ?? null);
+    });
+
+  const addNote = async () => {
+    if (!draft.trim() || saving) return;
+    setSaving(true);
+    setError("");
+    try {
+      const res = await api.addNote(caseId, draft.trim());
+      setNotes((n) => [...n, res.data]);
+      setDraft("");
+      await reloadCase();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const currentIndex = trackTimeline.findIndex((t) => t.status === "Under Investigation");
+  const reassignOfficer = async () => {
+    const officer = officers.find((o) => o.name === assigned);
+    if (!officer || saving) return;
+    setSaving(true);
+    setError("");
+    try {
+      await api.updateReport(caseId, { assigned_officer_id: officer.id });
+      setAssignedId(officer.id);
+      await reloadCase();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const markResolved = async () => {
+    if (saving) return;
+    setSaving(true);
+    setError("");
+    try {
+      await api.updateReport(caseId, { status: "resolved" });
+      await reloadCase();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const uploadEvidence = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || saving) return;
+    setSaving(true);
+    setError("");
+    try {
+      await api.uploadEvidence(caseId, file);
+      await reloadCase();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+      e.target.value = "";
+    }
+  };
+
+  if (error) {
+    return <div className="card p-8 text-center text-sm text-red-500">{error}</div>;
+  }
+
+  if (loading || !caseData) {
+    return <div className="card p-8 text-center text-sm text-slate-400">Loading case…</div>;
+  }
+
+  const statusLabel = formatStatus(caseData.status);
+  const priorityLabel = formatPriority(caseData.priority);
+  const timeline = caseData.timeline || [];
+  const gps = caseData.latitude && caseData.longitude
+    ? `${caseData.latitude}°, ${caseData.longitude}°`
+    : "—";
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <Link to="/dashboard/reports" className="mb-2 inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-police-700">
+          <Link to="/officer/reports" className="mb-2 inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-police-700">
             <ChevronLeft className="h-4 w-4" /> Back to Reports
           </Link>
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="font-display text-2xl font-extrabold text-police-900">KFD-2026-489201</h1>
-            <span className={`badge ${statusStyles["Under Investigation"]}`}>Under Investigation</span>
-            <span className="badge bg-red-100 text-red-700"><ShieldAlert className="h-3 w-3" /> Critical</span>
+            <h1 className="font-display text-2xl font-extrabold text-police-900">{caseData.case_id}</h1>
+            <span className={`badge ${statusStyles[statusLabel]}`}>{statusLabel}</span>
+            <span className={`badge ${priorityStyles[priorityLabel]}`}>
+              <ShieldAlert className="h-3 w-3" /> {priorityLabel}
+            </span>
           </div>
-          <p className="mt-1 text-sm text-slate-500">Armed Robbery · Jackson's Park, Koforidua · Reported 02 Jun 2026</p>
+          <p className="mt-1 text-sm text-slate-500">
+            {caseData.crime_type} · {caseData.location}, {caseData.zone} · Reported {formatDateTime(caseData.filed_at)}
+          </p>
         </div>
         <div className="flex gap-2">
-          <button className="btn-outline"><Download className="h-4 w-4" /> Export Case File</button>
-          <button className="btn-primary"><Check className="h-4 w-4" /> Mark Resolved</button>
+          <button className="btn-outline" disabled={saving}><Download className="h-4 w-4" /> Export Case File</button>
+          <button className="btn-primary" disabled={saving || caseData.status === "resolved"} onClick={markResolved}>
+            <Check className="h-4 w-4" /> Mark Resolved
+          </button>
         </div>
       </div>
 
-      {/* Tabs */}
+      {error && (
+        <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
+      )}
+
       <div className="flex gap-1 overflow-x-auto border-b border-slate-200">
         {tabs.map((t) => (
           <button
@@ -86,79 +200,86 @@ export default function Investigation() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          {/* INCIDENT TAB */}
           {tab === "Incident" && (
             <>
               <div className="card p-6">
                 <h2 className="mb-4 font-display text-base font-bold text-police-900">Case Details</h2>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Detail icon={FileText} label="Crime Type" value="Armed Robbery" />
-                  <Detail icon={Calendar} label="Incident Date" value="01 Jun 2026, 22:40" />
-                  <Detail icon={MapPin} label="Location" value="Jackson's Park, Koforidua" />
-                  <Detail icon={MapPin} label="GPS" value="6.0940° N, 0.2571° W" />
+                  <Detail icon={FileText} label="Crime Type" value={caseData.crime_type} />
+                  <Detail icon={Calendar} label="Incident Date" value={`${caseData.incident_date?.split("T")[0] || "—"}${caseData.incident_time ? `, ${caseData.incident_time}` : ""}`} />
+                  <Detail icon={MapPin} label="Location" value={`${caseData.location}, ${caseData.zone}`} />
+                  <Detail icon={MapPin} label="GPS" value={gps} />
                 </div>
                 <div className="mt-5 rounded-xl bg-slate-50 p-4">
                   <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Description</p>
-                  <p className="text-sm leading-relaxed text-slate-600">
-                    Two armed individuals on a motorcycle approached the victim near a retail shop and
-                    demanded valuables at gunpoint. Mobile phone and cash were taken before the suspects
-                    fled towards the Ring Road. No injuries reported. Nearby CCTV may have captured the incident.
-                  </p>
+                  <p className="text-sm leading-relaxed text-slate-600">{caseData.description}</p>
                 </div>
               </div>
 
-              <div className="card p-6">
-                <h2 className="mb-4 font-display text-base font-bold text-police-900">Reporter Details</h2>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Detail icon={User} label="Name" value="Joseph Adjei" />
-                  <Detail icon={Phone} label="Phone" value="+233 24 555 0110" />
+              {!caseData.is_anonymous && (
+                <div className="card p-6">
+                  <h2 className="mb-4 font-display text-base font-bold text-police-900">Reporter Details</h2>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Detail icon={User} label="Name" value={caseData.reporter_name || "—"} />
+                    <Detail icon={Phone} label="Phone" value={caseData.reporter_phone || "—"} />
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {caseData.is_anonymous && (
+                <div className="card p-6">
+                  <p className="text-sm text-slate-500">This report was filed anonymously.</p>
+                </div>
+              )}
 
               <div className="card p-6">
                 <h2 className="mb-4 font-display text-base font-bold text-police-900">Evidence Files</h2>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {evidence.map((e) => {
-                    const Icon = e.icon;
-                    return (
-                      <div key={e.name} className="flex items-center gap-3 rounded-xl border border-slate-200 p-3 transition hover:border-police-300 hover:bg-police-50">
-                        <div className="grid h-10 w-10 place-items-center rounded-lg bg-police-50 text-police-700">
-                          <Icon className="h-5 w-5" />
+                {caseData.evidence?.length > 0 ? (
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {caseData.evidence.map((e) => {
+                      const Icon = evidenceIcon[e.type] || File;
+                      return (
+                        <div key={e.name} className="flex items-center gap-3 rounded-xl border border-slate-200 p-3 transition hover:border-police-300 hover:bg-police-50">
+                          <div className="grid h-10 w-10 place-items-center rounded-lg bg-police-50 text-police-700">
+                            <Icon className="h-5 w-5" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium text-slate-700">{e.name}</p>
+                            <p className="text-xs text-slate-400">{e.size ? `${Math.round(e.size / 1024)} KB` : "—"}</p>
+                          </div>
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-medium text-slate-700">{e.name}</p>
-                          <p className="text-xs text-slate-400">{e.size}</p>
-                        </div>
-                        <button className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 hover:bg-white hover:text-police-700">
-                          <Download className="h-4 w-4" />
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-400">No evidence files attached.</p>
+                )}
               </div>
             </>
           )}
 
-          {/* NOTES TAB */}
           {tab === "Notes" && (
             <div className="card p-6">
               <h2 className="mb-4 font-display text-base font-bold text-police-900">Investigation Notes</h2>
               <div className="space-y-4">
-                {notes.map((n, i) => (
-                  <div key={i} className="flex gap-3">
-                    <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-police-700 text-xs font-bold text-white">
-                      {n.author.split(" ").map((w) => w[0]).slice(-2).join("")}
-                    </div>
-                    <div className="flex-1 rounded-xl bg-slate-50 p-3">
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm font-semibold text-slate-800">{n.author}</p>
-                        <p className="text-xs text-slate-400">{formatDateTime(n.date)}</p>
+                {notes.length === 0 ? (
+                  <p className="text-sm text-slate-400">No investigation notes yet.</p>
+                ) : (
+                  notes.map((n, i) => (
+                    <div key={i} className="flex gap-3">
+                      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-police-700 text-xs font-bold text-white">
+                        {n.author.split(" ").map((w) => w[0]).slice(-2).join("")}
                       </div>
-                      <p className="mt-1 text-sm text-slate-600">{n.text}</p>
+                      <div className="flex-1 rounded-xl bg-slate-50 p-3">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-semibold text-slate-800">{n.author}</p>
+                          <p className="text-xs text-slate-400">{formatDateTime(n.date)}</p>
+                        </div>
+                        <p className="mt-1 text-sm text-slate-600">{n.text}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
 
               <div className="mt-5 rounded-xl border border-slate-200 p-3">
@@ -170,22 +291,26 @@ export default function Investigation() {
                   onChange={(e) => setDraft(e.target.value)}
                 />
                 <div className="flex items-center justify-between border-t border-slate-100 pt-2">
-                  <button className="btn-ghost text-xs"><Paperclip className="h-4 w-4" /> Upload Document</button>
-                  <button onClick={addNote} className="btn-primary text-sm"><Send className="h-4 w-4" /> Add Note</button>
+                  <button type="button" className="btn-ghost text-xs" disabled={saving} onClick={() => document.getElementById("evidence-upload")?.click()}>
+                    <Paperclip className="h-4 w-4" /> Upload Document
+                  </button>
+                  <input id="evidence-upload" type="file" className="hidden" onChange={uploadEvidence} />
+                  <button onClick={addNote} disabled={saving} className="btn-primary text-sm"><Send className="h-4 w-4" /> Add Note</button>
                 </div>
               </div>
             </div>
           )}
 
-          {/* OFFICER TAB */}
           {tab === "Officer" && (
             <div className="card p-6">
               <h2 className="mb-4 font-display text-base font-bold text-police-900">Officer Assignment</h2>
               <div className="mb-5 flex items-center gap-3 rounded-xl bg-police-50 p-4">
-                <div className="grid h-12 w-12 place-items-center rounded-full bg-police-700 text-sm font-bold text-white">KM</div>
+                <div className="grid h-12 w-12 place-items-center rounded-full bg-police-700 text-sm font-bold text-white">
+                  {assigned.split(" ").map((w) => w[0]).slice(-2).join("")}
+                </div>
                 <div className="flex-1">
                   <p className="text-sm font-semibold text-slate-800">{assigned}</p>
-                  <p className="text-xs text-slate-500">Lead Investigator · Koforidua Central</p>
+                  <p className="text-xs text-slate-500">Lead Investigator · {caseData.station || "Koforidua"}</p>
                 </div>
                 <span className="badge bg-emerald-100 text-emerald-700">Active</span>
               </div>
@@ -193,36 +318,30 @@ export default function Investigation() {
               <label className="label">Reassign to officer</label>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <select className="input" value={assigned} onChange={(e) => setAssigned(e.target.value)}>
-                  {officers.map((o) => <option key={o}>{o}</option>)}
+                  {officers.map((o) => <option key={o.id} value={o.name}>{o.name}</option>)}
                 </select>
-                <button className="btn-primary whitespace-nowrap"><RefreshCw className="h-4 w-4" /> Reassign</button>
-              </div>
-
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                <button className="btn-outline justify-start"><UserPlus className="h-4 w-4" /> Add Supporting Officer</button>
-                <button className="btn-outline justify-start"><User className="h-4 w-4" /> View Officer Profile</button>
+                <button className="btn-primary whitespace-nowrap" disabled={saving} onClick={reassignOfficer}>
+                  <RefreshCw className="h-4 w-4" /> Reassign
+                </button>
               </div>
             </div>
           )}
 
-          {/* TIMELINE TAB */}
           {tab === "Timeline" && (
             <div className="card p-6">
               <h2 className="mb-5 font-display text-base font-bold text-police-900">Case Timeline</h2>
               <ol className="relative">
-                {trackTimeline.map((t, i) => {
-                  const done = i < currentIndex;
-                  const active = i === currentIndex;
+                {timeline.map((t, i) => {
+                  const isLast = i === timeline.length - 1;
+                  const label = eventLabels[t.event] || formatStatus(t.event);
                   return (
-                    <li key={t.status} className="relative flex gap-4 pb-7 last:pb-0">
-                      {i < trackTimeline.length - 1 && (
-                        <span className={`absolute left-[18px] top-9 h-[calc(100%-1.5rem)] w-0.5 ${done ? "bg-emerald-500" : "bg-slate-200"}`} />
-                      )}
-                      <div className={`relative z-10 grid h-9 w-9 shrink-0 place-items-center rounded-full ${done ? "bg-emerald-500 text-white" : active ? "bg-police-700 text-white" : "bg-slate-200 text-slate-400"}`}>
-                        {done ? <Check className="h-4 w-4" /> : active ? <Clock className="h-4 w-4" /> : i + 1}
+                    <li key={`${t.event}-${i}`} className="relative flex gap-4 pb-7 last:pb-0">
+                      {!isLast && <span className="absolute left-[18px] top-9 h-[calc(100%-1.5rem)] w-0.5 bg-emerald-500" />}
+                      <div className={`relative z-10 grid h-9 w-9 shrink-0 place-items-center rounded-full ${isLast ? "bg-police-700 text-white" : "bg-emerald-500 text-white"}`}>
+                        {isLast ? <Clock className="h-4 w-4" /> : <Check className="h-4 w-4" />}
                       </div>
                       <div className="pt-1">
-                        <p className={`font-semibold ${done || active ? "text-slate-800" : "text-slate-400"}`}>{t.status}</p>
+                        <p className="font-semibold text-slate-800">{label}</p>
                         <p className="mt-0.5 text-sm text-slate-500">{t.note}</p>
                         {t.date && <p className="mt-0.5 text-xs text-slate-400">{formatDateTime(t.date)}</p>}
                       </div>
@@ -234,27 +353,17 @@ export default function Investigation() {
           )}
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-6">
           <div className="card p-5">
             <h3 className="mb-3 font-display text-sm font-bold text-police-900">Case Summary</h3>
             <dl className="space-y-3 text-sm">
-              <Row label="Priority" value={<span className="badge bg-red-100 text-red-700">Critical</span>} />
-              <Row label="Status" value={<span className={`badge ${statusStyles["Under Investigation"]}`}>Under Investigation</span>} />
+              <Row label="Priority" value={<span className={`badge ${priorityStyles[priorityLabel]}`}>{priorityLabel}</span>} />
+              <Row label="Status" value={<span className={`badge ${statusStyles[statusLabel]}`}>{statusLabel}</span>} />
               <Row label="Officer" value={assigned} />
-              <Row label="Zone" value="Central Koforidua" />
-              <Row label="Days Open" value="8 days" />
-              <Row label="Evidence" value="4 files" />
+              <Row label="Zone" value={caseData.zone} />
+              <Row label="Days Open" value={`${caseData.days_open} day${caseData.days_open !== 1 ? "s" : ""}`} />
+              <Row label="Evidence" value={`${caseData.evidence?.length || 0} file(s)`} />
             </dl>
-          </div>
-
-          <div className="card p-5">
-            <h3 className="mb-3 font-display text-sm font-bold text-police-900">Quick Actions</h3>
-            <div className="space-y-2">
-              <button className="btn-outline w-full justify-start text-sm"><Send className="h-4 w-4" /> Message Reporter</button>
-              <button className="btn-outline w-full justify-start text-sm"><RefreshCw className="h-4 w-4" /> Update Status</button>
-              <button className="btn-outline w-full justify-start text-sm"><Paperclip className="h-4 w-4" /> Attach Document</button>
-            </div>
           </div>
         </div>
       </div>
